@@ -8,7 +8,7 @@ MCP Nexus is a desktop application that centralizes the management of MCP server
 
 - **🎯 Central Configuration** - Manage all MCP servers from a single config file
 - **🔄 Multi-Client Sync** - Automatically sync to Claude Code, Claude Desktop, Cursor, Cline, VS Code, Continue, Windsurf, and Warp
-- **🛍️ Marketplace Integration** - Browse and install servers from the PulseMCP marketplace
+- **🛍️ Marketplace Browsing** - Discover servers from the PulseMCP marketplace (browse-only in MVP; one-click install planned post-MVP)
 - **🔐 Secure Credentials** - Store API keys and tokens securely in macOS Keychain
 - **✅ Health Monitoring** - Check server health and connection status
 - **📦 Multiple Sources** - Install from NPM, PyPI, Docker, GitHub, local paths, or remote URLs
@@ -43,11 +43,16 @@ On first launch, MCP Nexus will:
 
 ### Installing Your First Server
 
-1. Navigate to **Marketplace** (Cmd+2)
-2. Search or browse for a server
-3. Click a server card to view details
-4. Click **Install** and select target clients
-5. Click **Sync All** to update client configs
+For the MVP, install servers via the **Servers** page:
+
+1. Go to **Servers** (Cmd+3)
+2. Click **Add Server Manually**
+3. Choose the source type (Local, Remote/SSE, NPM, etc.)
+4. Configure transport (stdio or SSE) and environment variables
+5. Select target clients and save
+6. Click **Sync All** to update client configs
+
+You can use the **Marketplace** (Cmd+2) to discover servers and view recommended install commands, then configure them manually on the Servers page. Full one-click install from Marketplace is planned post-MVP.
 
 ### Managing Servers
 
@@ -178,6 +183,18 @@ mcp-nexus/
 - **Backend**: Rust, Tauri 2.0
 - **State**: Zustand for global state
 - **Security**: macOS Keychain for credentials
+
+## MVP Readiness & Gap Analysis
+
+The current MVP readiness assessment and launch-blocking gap analysis for MCP Nexus is documented in [docs/mvp-gap-analysis.md](docs/mvp-gap-analysis.md). This document is the source of truth for P0/P1 gaps, feature specs, and launch criteria.
+
+Core maintainers should review and update the gap analysis:
+
+- Before each minor or major release.
+- After landing any feature that touches Marketplace install, sync engine, credential handling, or client detection.
+- At least once per quarter during active development.
+
+Responsibility for keeping the analysis current sits with the MCP Nexus core maintainers and release owners.
 
 ## Contributing
 
