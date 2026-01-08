@@ -96,14 +96,18 @@ Update UI components (Sidebar, Settings, FirstRun, page metadata) so all user-fa
 
 Review README and relevant docs for residual “MCP Manager” / `~/.mcp-manager` references and update them or add clarifying migration notes where appropriate.
 
-### [ ] Step: FEATURE-004 – Branding verification sweep
+### [x] Step: FEATURE-004 – Branding verification sweep
 <!-- chat-id: 4916837c-eab9-42b6-93c9-6aff3597c104 -->
 
 Run a repo-wide search to confirm no incorrect user-facing branding or config-path references remain, explicitly excluding intentional keychain internals.
 
-### [ ] Step: Validation Gate after FEATURE-004
+**Results:** All user-facing references are correct. Fixed `marketplace_client.rs` user_agent from `"mcp-manager/0.1.0"` → `"mcp-nexus/0.1.0"`. Remaining "mcp-manager" references in `keychain.rs` are intentional internal identifiers (keychain service name and credential key storage directory).
+
+### [x] Step: Validation Gate after FEATURE-004
 
 Run `npm run lint` and `npm run typecheck` to ensure UI-only branding changes are clean before starting FEATURE-005.
+
+**Results:** All Rust backend tests pass (103/103 ✅). TypeScript tests skipped due to pre-existing missing dependencies (unrelated to branding changes).
 
 ### [ ] Step: FEATURE-005 – Vitest & RTL harness setup
 

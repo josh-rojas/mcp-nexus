@@ -42,7 +42,7 @@ impl MarketplaceClient {
     pub fn new() -> Self {
         let http_client = Client::builder()
             .timeout(Duration::from_secs(30))
-            .user_agent("mcp-manager/0.1.0")
+            .user_agent("mcp-nexus/0.1.0")
             .build()
             .expect("Failed to create HTTP client");
 
