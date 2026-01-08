@@ -55,10 +55,12 @@ Save to `{@artifacts_path}/plan.md`. If the feature is trivial and doesn't warra
 Introduce a `notifications` helper module that wraps `showSuccess`/`showError`/`showWarning`/`showInfo` with semantic functions for installs, uninstalls, syncs, and credential operations, avoiding exposure of secrets.
 
 ### [ ] Step: FEATURE-002 – Servers & Marketplace toast integration
+<!-- chat-id: a79eb992-a902-421b-ad61-dd640ba2b646 -->
 
 Integrate notification helpers into Servers and Marketplace flows so server install/uninstall and Marketplace install paths consistently emit success/error toasts.
 
 ### [ ] Step: FEATURE-002 – Clients & credential toast integration
+<!-- chat-id: 9c5d2998-5432-4ed8-a888-e35848b697b6 -->
 
 Integrate notification helpers into Clients sync operations and `CredentialManager` create/delete flows, ensuring completion/failure states are clearly surfaced.
 
