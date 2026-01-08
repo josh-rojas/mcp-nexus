@@ -384,6 +384,7 @@ Run comprehensive validation: lint, typecheck, test suite, manual verification o
 ### macOS Design Enhancement (Phase 3A)
 
 ### [ ] Step: GAP-015 – Liquid Glass Material (Modal Overlays)
+<!-- chat-id: 625ab663-f120-4cae-b5ef-0e7496a97415 -->
 
 Implement frosted glass / blur effect on modal overlays for macOS 2025 HIG alignment (visual depth, modern aesthetic).
 
@@ -696,4 +697,4 @@ Add focused integration tests validating notification emissions across all flows
 
 ### [ ] Step: Final Verification & Report
 
-Run full backend/frontend test suite, validate against acceptance criteria, and write `{@artifacts_path}/report.md` summarizing implementation, test coverage, and deferred items.
+Run full backend/frontend test suite, validate against acceptance criteria, and write `{@artifacts_path}/report.md` summarizing implementation, test coverage, and deferred items. 

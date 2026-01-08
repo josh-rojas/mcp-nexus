@@ -182,13 +182,13 @@ function ServerDetailContent({
     (transportMode === "stdio" || (transportMode === "sse" && sseUrl.trim()));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[85vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="bg-background/80 backdrop-blur-xl border border-border/50 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[85vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-start justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-start justify-between p-4 border-b border-border/50">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white truncate">
+              <h2 className="text-xl font-semibold text-foreground truncate">
                 {server.name}
               </h2>
               {/* Transport badges */}
@@ -506,7 +506,7 @@ function ServerDetailContent({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 p-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-end gap-3 p-4 border-t border-border/50">
           <button
             onClick={onClose}
             disabled={isInstalling}
