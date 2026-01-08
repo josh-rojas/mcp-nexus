@@ -428,8 +428,7 @@ Implement dynamic theming based on user's system accent color preference (Blue, 
 
 ### Feature Enhancement & Testing (Phase 3B)
 
-### [ ] Step: FEATURE-006 – useServerDetails Hook
-<!-- chat-id: c42c70d9-c444-4231-90ca-3d77811eb229 -->
+### [x] Step: FEATURE-006 – useServerDetails Hook
 
 Replace stubbed `useServerDetails` with real React Query hook calling `get_server_details`, keyed per server name, respecting Marketplace cache semantics.
 
