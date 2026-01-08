@@ -43,7 +43,7 @@ export function FirstRunWelcome() {
 
   if (importComplete) {
     return (
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg shadow-lg p-8 text-white">
+      <div className="bg-gradient-to-r from-system-accent to-indigo-600 rounded-lg shadow-lg p-8 text-white">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-white/20 rounded-lg">
             <svg
@@ -62,7 +62,7 @@ export function FirstRunWelcome() {
           </div>
           <div className="flex-1">
             <h2 className="text-2xl font-bold mb-2">Import Complete</h2>
-            <p className="text-blue-100 mb-4">
+            <p className="text-white/90 mb-4">
               Your existing MCP servers have been imported. You can now manage
               them all from one place.
             </p>
@@ -87,7 +87,7 @@ export function FirstRunWelcome() {
   }
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg shadow-lg p-8 text-white">
+    <div className="bg-gradient-to-r from-system-accent to-indigo-600 rounded-lg shadow-lg p-8 text-white">
       <div className="flex items-start gap-4">
         <div className="p-3 bg-white/20 rounded-lg">
           <svg
@@ -106,7 +106,7 @@ export function FirstRunWelcome() {
         </div>
         <div className="flex-1">
           <h2 className="text-2xl font-bold mb-2">Welcome to MCP Nexus</h2>
-          <p className="text-blue-100 mb-4">
+          <p className="text-white/90 mb-4">
             Manage all your MCP servers from one central location. Install
             servers once and sync them to all your AI clients.
           </p>
@@ -126,11 +126,11 @@ export function FirstRunWelcome() {
                       type="checkbox"
                       checked={selectedClients.has(client.id)}
                       onChange={() => handleToggleClient(client.id)}
-                      className="w-4 h-4 rounded border-white/30 bg-white/20 text-blue-400 focus:ring-blue-400"
+                      className="w-4 h-4 rounded border-white/30 bg-white/20 text-white/90 focus:ring-white/50"
                     />
                     <span>
                       {client.name}{" "}
-                      <span className="text-blue-200">
+                      <span className="text-white/80">
                         ({client.serverCount} server
                         {client.serverCount !== 1 ? "s" : ""})
                       </span>
