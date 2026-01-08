@@ -77,7 +77,7 @@ export function notifySyncAllSuccess() {
 export function notifySyncAllError(error: unknown) {
   const message = getErrorMessage(
     error,
-    "Failed to sync configuration to all clients. Review client statuses for details."
+    "Failed to sync configuration to all clients. Review client statuses and logs at ~/.mcp-nexus/logs/auto-sync.log for details."
   );
 
   return showError("Sync failed", message);
@@ -158,4 +158,3 @@ export function notifyGenericError(operation: string, error: unknown) {
 
   return showError("Unexpected error", message);
 }
-

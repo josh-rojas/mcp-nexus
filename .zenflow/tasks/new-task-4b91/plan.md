@@ -72,17 +72,17 @@ Add focused tests around notification helpers and at least one UI-level assertio
 
 Run `npm run lint`, `npm run typecheck`, and `cd src-tauri && cargo test` (if backend touched) to ensure no regressions before starting FEATURE-003.
 
-### [ ] Step: FEATURE-003 – Auto-sync preference modeling (Rust/TS)
+### [x] Step: FEATURE-003 – Auto-sync preference modeling (Rust/TS)
 
-Extend `UserPreferences` in Rust and TS with an `autoSyncOnChanges` flag, maintain backwards-compatible defaults, and expose the preference via existing config commands.
+Extend `UserPreferences` in Rust and TS with an `autoSyncOnChanges` flag defaulting to `true`, maintain backwards-compatible defaults, and expose the preference via existing config commands and a dedicated config hook.
 
-### [ ] Step: FEATURE-003 – Settings UI binding for auto-sync
+### [x] Step: FEATURE-003 – Settings UI binding for auto-sync
 
 Bind the Settings “Auto-sync on changes” checkbox to the persisted preference using a config hook, handling loading/disabled states and error conditions.
 
-### [ ] Step: FEATURE-003 – Auto-sync triggering on server changes
+### [x] Step: FEATURE-003 – Auto-sync triggering on server changes
 
-Implement a debounced auto-sync mechanism on the frontend that, when enabled, triggers a Sync All after relevant server mutations (install/uninstall/toggle) while reusing existing sync commands and notifications.
+Implement a debounced auto-sync mechanism on the frontend that, when enabled, triggers a Sync All after relevant server mutations (update/toggle/import) while reusing existing sync commands and emitting failure notifications that reference the auto-sync log path.
 
 ### [ ] Step: FEATURE-003 – Auto-sync tests & behavior verification
 

@@ -4,10 +4,69 @@ use crate::services::sync_engine::{
     import_from_client, sync_to_all_clients, sync_to_client, update_client_sync_status,
     ClientSyncResult, ImportResult, SyncResult,
 };
+use chrono::Utc;
+use dirs;
+use std::fs::{create_dir_all, OpenOptions};
+use std::io::Write;
 use std::sync::Mutex;
 use tauri::State;
 
 use super::config::{AppState, CommandError};
+
+/// Append failed sync results to an auto-sync log file under ~/.mcp-nexus/logs/.
+fn append_sync_log(result: &SyncResult) {
+    if result.failed == 0 {
+        return;
+    }
+
+    let home = match dirs::home_dir() {
+        Some(path) => path,
+        None => return,
+    };
+
+    let log_dir = home.join(".mcp-nexus").join("logs");
+    if let Err(e) = create_dir_all(&log_dir) {
+        eprintln!("Failed to create log directory {:?}: {}", log_dir, e);
+        return;
+    }
+
+    let log_path = log_dir.join("auto-sync.log");
+    let file_result = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(&log_path);
+
+    let mut file = match file_result {
+        Ok(f) => f,
+        Err(e) => {
+            eprintln!("Failed to open auto-sync log {:?}: {}", log_path, e);
+            return;
+        }
+    };
+
+    let timestamp = Utc::now().to_rfc3339();
+    for client_result in &result.results {
+        if client_result.success {
+            continue;
+        }
+
+        let error = client_result
+            .error
+            .as_deref()
+            .unwrap_or("Unknown sync error");
+
+        if let Err(e) = writeln!(
+            file,
+            "{} client_id={} error={}",
+            timestamp,
+            client_result.client_id.as_str(),
+            error
+        ) {
+            eprintln!("Failed to write to auto-sync log {:?}: {}", log_path, e);
+            break;
+        }
+    }
+}
 
 /// Sync configuration to a single client
 #[tauri::command]
@@ -54,6 +113,9 @@ pub fn sync_all_clients(state: State<'_, Mutex<AppState>>) -> Result<SyncResult,
     })?;
 
     let result = sync_to_all_clients(&config);
+
+    // Log any failed syncs for observability (used by auto-sync and manual sync).
+    append_sync_log(&result);
 
     // Update client settings for successful syncs
     let mut updated_config = config.clone();

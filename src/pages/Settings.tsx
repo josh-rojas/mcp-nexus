@@ -2,6 +2,7 @@ import { Header } from "../components/layout/Header";
 import { EnvironmentStatus } from "../components/settings/EnvironmentStatus";
 import { CredentialManager } from "../components/settings/CredentialManager";
 import { useRefreshUpdates, useServersWithUpdates } from "../hooks/useUpdates";
+import { useConfig, useUpdatePreferences } from "../hooks/useConfig";
 import { formatDistanceToNow } from "../lib/utils";
 
 export function Settings() {
@@ -17,6 +18,11 @@ export function Settings() {
   const handleCheckForUpdates = () => {
     refreshUpdatesMutation.mutate();
   };
+
+  const { data: config } = useConfig();
+  const updatePreferences = useUpdatePreferences();
+  const autoSyncEnabled =
+    config?.preferences.autoSyncOnChanges ?? true;
 
   return (
     <div className="flex-1 flex flex-col">
@@ -178,12 +184,20 @@ export function Settings() {
                     Auto-sync on changes
                   </span>
                   <p className="text-sm text-gray-500">
-                    Automatically sync to clients when config changes
+                    Automatically sync to clients when config changes. If a sync
+                    fails, you will see a notification with a link to the log file.
                   </p>
                 </div>
                 <input
                   type="checkbox"
                   className="w-5 h-5 text-blue-600 rounded"
+                  checked={autoSyncEnabled}
+                  onChange={(e) =>
+                    updatePreferences.mutate({
+                      autoSyncOnChanges: e.target.checked,
+                    })
+                  }
+                  disabled={updatePreferences.isPending}
                 />
               </label>
             </div>

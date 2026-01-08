@@ -16,6 +16,7 @@ import type {
   SyncResult,
   ImportResult,
 } from "../types";
+import { useAutoSync } from "./useAutoSync";
 
 /** Hook for fetching detected clients */
 export function useDetectedClients() {
@@ -87,6 +88,7 @@ export function useSetClientSyncEnabled() {
 /** Hook for importing servers from a client */
 export function useImportClientServers() {
   const queryClient = useQueryClient();
+  const { triggerAutoSync } = useAutoSync();
 
   return useMutation<
     ImportResult,
@@ -99,6 +101,7 @@ export function useImportClientServers() {
       // Invalidate servers list after import
       queryClient.invalidateQueries({ queryKey: ["servers"] });
       queryClient.invalidateQueries({ queryKey: ["clients"] });
+      triggerAutoSync();
     },
   });
 }

@@ -34,6 +34,9 @@ pub struct UserPreferences {
     /// Show system notifications
     #[serde(default = "default_true")]
     pub show_notifications: bool,
+    /// Automatically sync client configs when the central config changes
+    #[serde(default = "default_true")]
+    pub auto_sync_on_changes: bool,
     /// Registry refresh interval in minutes
     #[serde(default = "default_refresh_interval")]
     pub registry_refresh_interval: u32,
@@ -48,6 +51,7 @@ impl Default for UserPreferences {
         Self {
             auto_detect_clients: true,
             show_notifications: true,
+            auto_sync_on_changes: true,
             registry_refresh_interval: default_refresh_interval(),
         }
     }

@@ -17,6 +17,7 @@ import type {
   UninstallServerResponse,
   SyncResult,
 } from "../types";
+import { useAutoSync } from "./useAutoSync";
 
 /** Hook for fetching all servers */
 export function useServerList() {
@@ -40,6 +41,7 @@ export function useServer(serverId: string | null) {
 /** Hook for updating a server */
 export function useUpdateServer() {
   const queryClient = useQueryClient();
+  const { triggerAutoSync } = useAutoSync();
 
   return useMutation<McpServer, Error, McpServer>({
     mutationFn: updateServer,
@@ -49,6 +51,7 @@ export function useUpdateServer() {
         old?.map((s) => (s.id === updatedServer.id ? updatedServer : s))
       );
       queryClient.invalidateQueries({ queryKey: ["servers", updatedServer.id] });
+      triggerAutoSync();
     },
   });
 }
@@ -72,6 +75,7 @@ export function useRemoveServer() {
 /** Hook for toggling a server's client status */
 export function useToggleServerClient() {
   const queryClient = useQueryClient();
+  const { triggerAutoSync } = useAutoSync();
 
   return useMutation<
     void,
@@ -83,6 +87,7 @@ export function useToggleServerClient() {
     onSuccess: () => {
       // Invalidate servers to refresh the list
       queryClient.invalidateQueries({ queryKey: ["servers"] });
+      triggerAutoSync();
     },
   });
 }

@@ -62,6 +62,7 @@ export interface ClientSettings {
 export interface UserPreferences {
   autoDetectClients: boolean;
   showNotifications: boolean;
+  autoSyncOnChanges: boolean;
   registryRefreshInterval: number;
 }
 
