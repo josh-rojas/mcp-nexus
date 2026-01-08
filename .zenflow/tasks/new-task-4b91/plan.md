@@ -138,6 +138,7 @@ Configure Vitest and React Testing Library (plus jsdom) in `package.json` and `v
 ---
 
 ### [ ] Step 1: GAP-017 – Native macOS Window Styling ⚡ **PARALLEL**
+<!-- chat-id: 07cb1b8b-8dd3-4b03-86f8-6c931485ec0e -->
 
 Update Tauri window configuration for native macOS appearance (transparent title bar, traffic light positioning, respects light/dark mode).
 
