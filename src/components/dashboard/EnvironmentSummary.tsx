@@ -102,7 +102,7 @@ export function EnvironmentSummary() {
       <button
         onClick={refresh}
         disabled={isLoading}
-        className="mt-4 inline-flex items-center text-sm font-medium text-system-accent dark:text-system-accent hover:text-blue-800 dark:hover:text-blue-300 disabled:opacity-50"
+        className="mt-4 inline-flex items-center text-sm font-medium text-system-accent hover:text-system-accent/80 disabled:opacity-50"
       >
         {isLoading ? (
           <>

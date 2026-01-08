@@ -66,7 +66,7 @@ export function CredentialInput({
             <button
               type="button"
               onClick={handleClear}
-              className="p-1 hover:bg-system-accent/10 dark:hover:bg-blue-800 rounded-full"
+              className="p-1 hover:bg-system-accent/10 dark:hover:bg-system-accent/20 rounded-full"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path

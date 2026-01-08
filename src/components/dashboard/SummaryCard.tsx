@@ -47,7 +47,7 @@ export function SummaryCard({
       {link && linkLabel && (
         <Link
           to={link}
-          className="mt-4 inline-flex items-center text-sm font-medium text-system-accent dark:text-system-accent hover:text-blue-800 dark:hover:text-blue-300"
+          className="mt-4 inline-flex items-center text-sm font-medium text-system-accent hover:text-system-accent/80"
         >
           {linkLabel}
           <svg
