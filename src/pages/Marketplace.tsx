@@ -24,7 +24,8 @@ export function Marketplace() {
   const [remoteAvailable, setRemoteAvailable] = useState(false);
 
   // Selected server for detail view
-  const [selectedServer, setSelectedServer] = useState<MarketplaceServer | null>(null);
+  const [selectedServer, setSelectedServer] =
+    useState<MarketplaceServer | null>(null);
 
   // Installation state
   const [isInstalling, setIsInstalling] = useState(false);
@@ -127,7 +128,10 @@ export function Marketplace() {
           </button>
         }
       />
-      <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-auto">
+      <main
+        className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-auto"
+        role="main"
+      >
         {/* Search and filters */}
         <div className="mb-6 space-y-4">
           {/* Search and sort row */}

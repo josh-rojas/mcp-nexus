@@ -24,13 +24,14 @@ export function Dashboard() {
     initializeConfig()
       .then(setInitResult)
       .catch((err) => {
-        setInitError(err instanceof Error ? err.message : "Failed to initialize");
+        setInitError(
+          err instanceof Error ? err.message : "Failed to initialize"
+        );
       });
   }, []);
 
   const hasServers = (servers?.length ?? 0) > 0;
-  const hasClients =
-    (clients?.filter((c) => c.detected).length ?? 0) > 0;
+  const hasClients = (clients?.filter((c) => c.detected).length ?? 0) > 0;
   const isFirstRun = initResult?.firstRun && !hasServers;
 
   // Show error if initialization failed
@@ -41,7 +42,7 @@ export function Dashboard() {
           title="Dashboard"
           subtitle="Overview of your MCP servers and clients"
         />
-        <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900">
+        <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900" role="main">
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-red-700 dark:text-red-300">
             <h3 className="text-lg font-medium mb-2">Initialization Error</h3>
             <p>{initError}</p>
@@ -63,7 +64,10 @@ export function Dashboard() {
         title="Dashboard"
         subtitle="Overview of your MCP servers and clients"
       />
-      <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-y-auto">
+      <main
+        className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-y-auto"
+        role="main"
+      >
         {/* First Run Welcome */}
         {isFirstRun && (
           <div className="mb-6">

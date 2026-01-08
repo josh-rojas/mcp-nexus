@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { Plus, Search, RefreshCw } from "lucide-react";
 import { Header } from "../components/layout/Header";
 import { ServerList } from "../components/servers/ServerList";
 import { AddServerModal } from "../components/servers/AddServerModal";
@@ -69,7 +70,9 @@ function ErrorState({
       <p className="text-lg text-red-600 dark:text-red-400 font-medium">
         Error loading servers
       </p>
-      <p className="text-sm mt-2 text-gray-500 dark:text-gray-400">{errorMessage}</p>
+      <p className="text-sm mt-2 text-gray-500 dark:text-gray-400">
+        {errorMessage}
+      </p>
       <button
         onClick={onRetry}
         className="mt-4 px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
@@ -103,30 +106,22 @@ function EmptyState({ onAddServer }: { onAddServer: () => void }) {
         No servers installed
       </p>
       <p className="text-sm mt-2 max-w-md mx-auto">
-        Install servers from the Marketplace or add them manually using the button above.
+        Install servers from the Marketplace or add them manually using the
+        button above.
       </p>
       <div className="mt-6 flex justify-center gap-4">
         <button
           onClick={onAddServer}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
+          <Plus className="w-5 h-5" />
           Add Server Manually
         </button>
         <a
           href="/marketplace"
           className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center gap-2"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <Search className="w-5 h-5" />
           Browse Marketplace
         </a>
       </div>
@@ -265,19 +260,9 @@ export function Servers() {
                 disabled={isSyncing}
                 className="px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 flex items-center gap-2"
               >
-                <svg
+                <RefreshCw
                   className={`h-4 w-4 ${isSyncing ? "animate-spin" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
+                />
                 {isSyncing ? "Syncing..." : "Sync All"}
               </button>
             )}
@@ -285,20 +270,16 @@ export function Servers() {
               onClick={handleOpenAddModal}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
+              <Plus className="w-4 h-4" />
               Add Server
             </button>
           </div>
         }
       />
-      <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-auto">
+      <main
+        className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-auto"
+        role="main"
+      >
         {/* Status indicators */}
         {(isTogglingClient || isRemoving) && (
           <div className="mb-4 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg flex items-center gap-2">
@@ -322,7 +303,9 @@ export function Servers() {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               />
             </svg>
-            {isRemoving ? "Removing server..." : "Updating server configuration..."}
+            {isRemoving
+              ? "Removing server..."
+              : "Updating server configuration..."}
           </div>
         )}
 

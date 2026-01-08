@@ -1,25 +1,33 @@
 // src/components/common/Toast.tsx
-import { useNotificationStore, type Notification, type NotificationType } from "../../stores/notificationStore";
+import { CheckCircle2, XCircle, AlertTriangle, Info, X } from "lucide-react";
+import {
+  useNotificationStore,
+  type Notification,
+  type NotificationType,
+} from "../../stores/notificationStore";
 
-const typeStyles: Record<NotificationType, { bg: string; icon: string; iconColor: string }> = {
+const typeStyles: Record<
+  NotificationType,
+  { bg: string; icon: React.ReactNode; iconColor: string }
+> = {
   success: {
     bg: "bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800",
-    icon: "✓",
+    icon: <CheckCircle2 className="w-5 h-5" />,
     iconColor: "text-green-500",
   },
   error: {
     bg: "bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800",
-    icon: "✕",
+    icon: <XCircle className="w-5 h-5" />,
     iconColor: "text-red-500",
   },
   warning: {
     bg: "bg-yellow-50 dark:bg-yellow-900/30 border-yellow-200 dark:border-yellow-800",
-    icon: "⚠",
+    icon: <AlertTriangle className="w-5 h-5" />,
     iconColor: "text-yellow-500",
   },
   info: {
     bg: "bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800",
-    icon: "ℹ",
+    icon: <Info className="w-5 h-5" />,
     iconColor: "text-blue-500",
   },
 };
@@ -33,11 +41,15 @@ function ToastItem({ notification }: { notification: Notification }) {
       className={`flex items-start gap-3 p-4 rounded-lg border shadow-lg ${styles.bg} animate-slide-in`}
       role="alert"
     >
-      <span className={`text-lg font-bold ${styles.iconColor}`}>{styles.icon}</span>
+      <span className={`${styles.iconColor}`}>{styles.icon}</span>
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-gray-900 dark:text-white">{notification.title}</p>
+        <p className="font-medium text-gray-900 dark:text-white">
+          {notification.title}
+        </p>
         {notification.message && (
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">{notification.message}</p>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
+            {notification.message}
+          </p>
         )}
       </div>
       <button
@@ -45,7 +57,7 @@ function ToastItem({ notification }: { notification: Notification }) {
         className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
         aria-label="Dismiss"
       >
-        ✕
+        <X className="w-4 h-4" />
       </button>
     </div>
   );
@@ -64,4 +76,3 @@ export function ToastContainer() {
     </div>
   );
 }
-

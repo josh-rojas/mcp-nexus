@@ -1,6 +1,10 @@
 import { useState, useCallback } from "react";
 import { Header } from "../components/layout/Header";
-import { ClientCard, SyncStatus, ManualConfigModal } from "../components/clients";
+import {
+  ClientCard,
+  SyncStatus,
+  ManualConfigModal,
+} from "../components/clients";
 import {
   useClients,
   useSyncClient,
@@ -30,7 +34,8 @@ export function Clients() {
   const [isSyncingAll, setIsSyncingAll] = useState(false);
 
   // Manual config modal state
-  const [manualConfigClientId, setManualConfigClientId] = useState<ClientId | null>(null);
+  const [manualConfigClientId, setManualConfigClientId] =
+    useState<ClientId | null>(null);
   const manualConfigQuery = useManualConfig(manualConfigClientId);
 
   // Get the client for the manual config modal
@@ -44,7 +49,7 @@ export function Clients() {
       setSyncResult(null);
       try {
         const result = await syncClient.mutateAsync(clientId);
-         const clientName =
+        const clientName =
           clients?.find((c) => c.id === clientId)?.name ?? clientId;
 
         // Convert single result to SyncResult format for display
@@ -84,9 +89,7 @@ export function Clients() {
         notifySyncAllSuccess();
       } else {
         notifySyncAllError(
-          new Error(
-            `Sync completed with ${result.failed} client failure(s).`
-          )
+          new Error(`Sync completed with ${result.failed} client failure(s).`)
         );
       }
     } catch (err) {
@@ -158,7 +161,7 @@ export function Clients() {
     return (
       <div className="flex-1 flex flex-col">
         <Header title="Clients" subtitle="Manage AI client configurations" />
-        <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900">
+        <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900" role="main">
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
             <div className="flex items-start gap-3">
               <svg
@@ -257,7 +260,10 @@ export function Clients() {
           </button>
         }
       />
-      <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-auto">
+      <main
+        className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-auto"
+        role="main"
+      >
         {/* Sync status notification */}
         {(syncResult || isSyncingAll) && (
           <div className="mb-6">

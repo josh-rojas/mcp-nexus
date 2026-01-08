@@ -1,3 +1,4 @@
+import { Star, Download, Package } from "lucide-react";
 import type { MarketplaceServer } from "../../types";
 
 interface MarketplaceCardProps {
@@ -49,7 +50,9 @@ export function MarketplaceCard({ server, onSelect }: MarketplaceCardProps) {
           )}
           {/* Registry badge */}
           {server.package_registry && (
-            <span className={`px-2 py-0.5 text-xs rounded-full ${getRegistryColor(server.package_registry)}`}>
+            <span
+              className={`px-2 py-0.5 text-xs rounded-full ${getRegistryColor(server.package_registry)}`}
+            >
               {server.package_registry}
             </span>
           )}
@@ -58,7 +61,9 @@ export function MarketplaceCard({ server, onSelect }: MarketplaceCardProps) {
 
       {/* Description */}
       <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-        {server.short_description || server.ai_description || "No description available"}
+        {server.short_description ||
+          server.ai_description ||
+          "No description available"}
       </p>
 
       {/* Stats */}
@@ -66,39 +71,24 @@ export function MarketplaceCard({ server, onSelect }: MarketplaceCardProps) {
         {/* GitHub stars */}
         {server.github_stars !== undefined && server.github_stars > 0 && (
           <div className="flex items-center gap-1">
-            <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
+            <Star className="h-4 w-4" />
             <span>{formatNumber(server.github_stars)}</span>
           </div>
         )}
 
         {/* Download count */}
-        {server.package_download_count !== undefined && server.package_download_count > 0 && (
-          <div className="flex items-center gap-1">
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
-            </svg>
-            <span>{formatNumber(server.package_download_count)}</span>
-          </div>
-        )}
+        {server.package_download_count !== undefined &&
+          server.package_download_count > 0 && (
+            <div className="flex items-center gap-1">
+              <Download className="h-4 w-4" />
+              <span>{formatNumber(server.package_download_count)}</span>
+            </div>
+          )}
 
         {/* Package name */}
         {server.package_name && (
           <div className="flex items-center gap-1 truncate">
-            <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-              />
-            </svg>
+            <Package className="h-4 w-4 shrink-0" />
             <span className="truncate">{server.package_name}</span>
           </div>
         )}

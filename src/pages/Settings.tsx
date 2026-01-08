@@ -21,13 +21,15 @@ export function Settings() {
 
   const { data: config } = useConfig();
   const updatePreferences = useUpdatePreferences();
-  const autoSyncEnabled =
-    config?.preferences.autoSyncOnChanges ?? true;
+  const autoSyncEnabled = config?.preferences.autoSyncOnChanges ?? true;
 
   return (
     <div className="flex-1 flex flex-col">
       <Header title="Settings" subtitle="Configure MCP Nexus" />
-      <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-y-auto">
+      <main
+        className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-y-auto"
+        role="main"
+      >
         <div className="max-w-2xl space-y-6">
           <EnvironmentStatus />
 
@@ -122,13 +124,20 @@ export function Settings() {
                       </h4>
                       <ul className="mt-2 space-y-1 text-sm text-amber-700 dark:text-amber-400">
                         {serversWithUpdates.map((update) => (
-                          <li key={update.serverId} className="flex items-center gap-2">
-                            <span className="font-medium">{update.serverName}</span>
-                            {update.installedVersion && update.latestVersion && (
-                              <span className="text-amber-600 dark:text-amber-500">
-                                {update.installedVersion} → {update.latestVersion}
-                              </span>
-                            )}
+                          <li
+                            key={update.serverId}
+                            className="flex items-center gap-2"
+                          >
+                            <span className="font-medium">
+                              {update.serverName}
+                            </span>
+                            {update.installedVersion &&
+                              update.latestVersion && (
+                                <span className="text-amber-600 dark:text-amber-500">
+                                  {update.installedVersion} →{" "}
+                                  {update.latestVersion}
+                                </span>
+                              )}
                           </li>
                         ))}
                       </ul>
@@ -185,7 +194,8 @@ export function Settings() {
                   </span>
                   <p className="text-sm text-gray-500">
                     Automatically sync to clients when config changes. If a sync
-                    fails, you will see a notification with a link to the log file.
+                    fails, you will see a notification with a link to the log
+                    file.
                   </p>
                 </div>
                 <input
