@@ -73,6 +73,10 @@ Integrate notification helpers into Clients sync operations and `CredentialManag
 
 Add focused tests around notification helpers and at least one UI-level assertion per critical flow to validate that expected notifications are emitted.
 
+### [ ] Step: Validation Gate after FEATURE-002
+
+Run `npm run lint`, `npm run typecheck`, and `cd src-tauri && cargo test` (if backend touched) to ensure no regressions before starting FEATURE-003.
+
 ### [ ] Step: FEATURE-003 – Auto-sync preference modeling (Rust/TS)
 
 Extend `UserPreferences` in Rust and TS with an `autoSyncOnChanges` flag, maintain backwards-compatible defaults, and expose the preference via existing config commands.
@@ -89,6 +93,10 @@ Implement a debounced auto-sync mechanism on the frontend that, when enabled, tr
 
 Add tests around preference persistence and auto-sync trigger logic, then manually verify that enabling/disabling the flag toggles background sync behavior as expected.
 
+### [ ] Step: Validation Gate after FEATURE-003
+
+Run `npm run lint`, `npm run typecheck`, and `cd src-tauri && cargo test` (if backend touched) to ensure no regressions before starting FEATURE-004.
+
 ### [ ] Step: FEATURE-004 – Branding & config path updates in UI
 
 Update UI components (Sidebar, Settings, FirstRun, page metadata) so all user-facing app-name and central-config-path references use “MCP Nexus” and `~/.mcp-nexus/config.json`.
@@ -100,6 +108,10 @@ Review README and relevant docs for residual “MCP Manager” / `~/.mcp-manager
 ### [ ] Step: FEATURE-004 – Branding verification sweep
 
 Run a repo-wide search to confirm no incorrect user-facing branding or config-path references remain, explicitly excluding intentional keychain internals.
+
+### [ ] Step: Validation Gate after FEATURE-004
+
+Run `npm run lint` and `npm run typecheck` to ensure UI-only branding changes are clean before starting FEATURE-005.
 
 ### [ ] Step: FEATURE-005 – Vitest & RTL harness setup
 
@@ -113,6 +125,10 @@ Implement smoke tests for the Servers and Marketplace pages that cover server in
 
 Implement smoke tests for Clients sync, credential create/delete in Settings, and first-run import behavior, ensuring they rely on mocked backends only.
 
+### [ ] Step: Validation Gate after FEATURE-005
+
+Run `npm run lint`, `npm run typecheck`, and `npm test` to confirm the new frontend test harness and smoke tests are stable before starting FEATURE-006.
+
 ### [ ] Step: FEATURE-006 – useServerDetails hook implementation
 
 Replace the stubbed `useServerDetails` with a real React Query hook that calls `get_server_details`, keyed per server name and respecting Marketplace cache semantics.
@@ -124,6 +140,10 @@ Enhance `ServerDetailModal` to consume `useServerDetails`, prefer richer metadat
 ### [ ] Step: FEATURE-006 – Details hook tests & UX verification
 
 Add tests for `useServerDetails` query behavior and a UI-level assertion for the detail modal, then manually inspect a few Marketplace entries to validate UX and error resilience.
+
+### [ ] Step: Validation Gate after FEATURE-006
+
+Run `npm run lint`, `npm run typecheck`, and UI-focused tests touching Marketplace to ensure detail hook changes are stable before any P2 work on FEATURE-001.
 
 ---
 
