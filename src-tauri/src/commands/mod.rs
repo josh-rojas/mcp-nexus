@@ -6,6 +6,7 @@ mod installation;
 mod keychain;
 mod marketplace;
 mod sync;
+mod system;
 mod updates;
 
 pub use clients::{detect_clients, get_all_client_statuses, get_client_config, get_client_status};
@@ -30,6 +31,7 @@ pub use sync::{
     get_manual_config, import_client_servers, set_client_sync_enabled, sync_all_clients,
     sync_client,
 };
+pub use system::get_system_accent_color;
 pub use updates::{
     check_for_updates, check_package_version, check_server_update, get_update_count,
 };

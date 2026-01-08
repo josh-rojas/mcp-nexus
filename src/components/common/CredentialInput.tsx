@@ -50,7 +50,7 @@ export function CredentialInput({
     <div className={`relative ${className}`} ref={dropdownRef}>
       <div className="flex gap-2">
         {isKeychainRef ? (
-          <div className="flex-1 flex items-center justify-between px-3 py-2 border border-blue-300 dark:border-blue-700 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+          <div className="flex-1 flex items-center justify-between px-3 py-2 border border-system-accent/30 dark:border-system-accent/40 rounded-lg bg-system-accent/5 dark:bg-system-accent/20 text-system-accent dark:text-system-accent">
             <div className="flex items-center gap-2">
               <Key className="w-4 h-4" />
               <span className="font-medium text-sm">{credentialName}</span>
@@ -58,7 +58,7 @@ export function CredentialInput({
             <button
               type="button"
               onClick={handleClear}
-              className="p-1 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-full"
+              className="p-1 hover:bg-system-accent/10 dark:hover:bg-system-accent/20 rounded-full"
             >
               <X className="w-4 h-4" />
             </button>
@@ -70,7 +70,7 @@ export function CredentialInput({
               value={value}
               onChange={(e) => onChange(e.target.value)}
               placeholder={placeholder}
-              className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+              className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent font-mono text-sm"
             />
             <button
               type="button"
@@ -92,7 +92,7 @@ export function CredentialInput({
             onClick={() => setShowDropdown(!showDropdown)}
             className={`p-2 border rounded-lg transition-colors ${
               showDropdown
-                ? "bg-blue-50 dark:bg-blue-900/30 border-blue-500 text-blue-600 dark:text-blue-400"
+                ? "bg-system-accent/5 dark:bg-system-accent/20 border-system-accent text-system-accent dark:text-system-accent"
                 : "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600"
             }`}
             title="Insert from Keychain"

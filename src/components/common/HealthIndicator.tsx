@@ -21,7 +21,7 @@ export function HealthIndicator({
       case "unhealthy":
         return "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-300 dark:border-red-700";
       case "running":
-        return "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-700";
+        return "bg-system-accent/10 dark:bg-system-accent/20 text-system-accent dark:text-system-accent border-system-accent/30 dark:border-system-accent/40";
       case "stopped":
         return "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-600";
       case "unknown":

@@ -97,7 +97,7 @@ function EmptyState({ onAddServer }: { onAddServer: () => void }) {
       <div className="mt-6 flex justify-center gap-4">
         <button
           onClick={onAddServer}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-system-accent text-white rounded-lg hover:opacity-90 transition-colors flex items-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Add Server Manually
@@ -253,7 +253,7 @@ export function Servers() {
             )}
             <button
               onClick={handleOpenAddModal}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-system-accent text-white rounded-lg hover:opacity-90 transition-colors flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Add Server

@@ -155,7 +155,7 @@ export function CredentialManager() {
         </h3>
         <button
           onClick={handleOpenAdd}
-          className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          className="px-3 py-1.5 bg-system-accent text-white text-sm font-medium rounded-lg hover:opacity-90 transition-colors"
         >
           Add Credential
         </button>
@@ -219,7 +219,7 @@ export function CredentialManager() {
                           {usedBy.map((serverName) => (
                             <span
                               key={serverName}
-                              className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                              className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-system-accent/10 dark:bg-system-accent/20 text-system-accent dark:text-system-accent"
                             >
                               {serverName}
                             </span>
@@ -230,7 +230,7 @@ export function CredentialManager() {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
                         onClick={() => handleOpenEdit(name)}
-                        className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-4"
+                        className="text-system-accent dark:text-system-accent hover:text-blue-900 dark:hover:text-blue-300 mr-4"
                       >
                         Update
                       </button>
@@ -299,7 +299,7 @@ export function CredentialManager() {
                   onChange={(e) => setKeyName(e.target.value)}
                   disabled={!!editingName}
                   placeholder="e.g. github-token"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed"
                 />
                 {!editingName && (
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -317,7 +317,7 @@ export function CredentialManager() {
                   value={secretValue}
                   onChange={(e) => setSecretValue(e.target.value)}
                   placeholder="Enter secret value..."
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                 />
               </div>
 
@@ -332,7 +332,7 @@ export function CredentialManager() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                  className="px-4 py-2 bg-system-accent text-white rounded-lg hover:opacity-90 transition-colors disabled:opacity-50 flex items-center gap-2"
                 >
                   {isSaving ? "Saving..." : "Save Credential"}
                 </button>

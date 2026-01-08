@@ -111,7 +111,7 @@ function IssueItem({ issue }: IssueItemProps) {
       case "warning":
         return "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300";
       case "info":
-        return "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300";
+        return "bg-system-accent/5 dark:bg-system-accent/15 border-system-accent/20 dark:border-system-accent/30 text-system-accent dark:text-system-accent";
     }
   };
 
@@ -152,7 +152,7 @@ function IssueItem({ issue }: IssueItemProps) {
       case "info":
         return (
           <svg
-            className="h-4 w-4 text-blue-500"
+            className="h-4 w-4 text-system-accent"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -215,7 +215,7 @@ export function EnvironmentStatus() {
       <button
         onClick={handleRunDoctor}
         disabled={isLoading}
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+        className="px-4 py-2 bg-system-accent text-white rounded-lg hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
       >
         {isLoading && (
           <svg

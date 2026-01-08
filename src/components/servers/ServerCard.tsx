@@ -74,7 +74,7 @@ export function ServerCard({
       <span
         className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
           isStdio
-            ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
+            ? "bg-system-accent/10 dark:bg-system-accent/20 text-system-accent dark:text-system-accent"
             : "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400"
         }`}
       >
@@ -159,7 +159,7 @@ export function ServerCard({
                   }
                 }}
               />
-              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-system-accent"></div>
             </label>
           </div>
         </div>
@@ -175,7 +175,7 @@ export function ServerCard({
               {server.enabledClients.map((clientId) => (
                 <span
                   key={clientId}
-                  className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                  className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-system-accent/10 dark:bg-system-accent/20 text-system-accent dark:text-system-accent"
                 >
                   {getClientName(clientId)}
                 </span>
@@ -216,7 +216,7 @@ export function ServerCard({
             {onViewDetails && (
               <button
                 onClick={() => onViewDetails(server)}
-                className="p-1.5 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="p-1.5 text-gray-400 hover:text-system-accent dark:hover:text-blue-400 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 title="View details"
               >
                 <svg
@@ -280,7 +280,7 @@ export function ServerCard({
                       type="checkbox"
                       checked={isEnabled}
                       onChange={(e) => handleToggleClient(clientId, e.target.checked)}
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      className="w-4 h-4 text-system-accent bg-gray-100 border-gray-300 rounded focus:ring-system-accent dark:focus:ring-system-accent dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
                     <span className="text-sm text-gray-700 dark:text-gray-300">
                       {getClientName(clientId)}

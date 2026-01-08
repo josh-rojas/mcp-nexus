@@ -18,7 +18,7 @@ interface SyncStatusProps {
 export function SyncStatus({ result, isLoading, onDismiss }: SyncStatusProps) {
   if (isLoading) {
     return (
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+      <div className="bg-system-accent/5 dark:bg-system-accent/15 border border-system-accent/20 dark:border-system-accent/30 rounded-lg p-4">
         <div className="flex items-center gap-3">
           <Loader2
             className="animate-spin h-5 w-5 text-blue-600 dark:text-blue-400"
@@ -26,10 +26,10 @@ export function SyncStatus({ result, isLoading, onDismiss }: SyncStatusProps) {
             role="status"
           />
           <div>
-            <p className="font-medium text-blue-700 dark:text-blue-300">
+            <p className="font-medium text-system-accent dark:text-system-accent">
               Syncing to clients...
             </p>
-            <p className="text-sm text-blue-600 dark:text-blue-400">
+            <p className="text-sm text-system-accent dark:text-system-accent">
               Please wait while configurations are updated
             </p>
           </div>

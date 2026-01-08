@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Sidebar } from "./components/layout/Sidebar";
-import { ToastContainer } from "./components/common/Toast";
+import { Toaster } from "@/components/ui/sonner";
 import { ErrorBoundary } from "./components/common/ErrorBoundary";
 import { useGlobalKeyboardShortcuts } from "./hooks/useKeyboard";
+import { ThemeProvider } from "./components/ThemeProvider";
 import { Dashboard, Marketplace, Servers, Clients, Settings } from "./pages";
 import "./App.css";
 
@@ -22,7 +23,7 @@ function AppContent() {
             <p className="text-red-600 dark:text-red-400 mb-4">Failed to load this page</p>
             <button 
               onClick={() => window.location.href = "/"}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-system-accent text-white rounded-lg hover:opacity-90"
             >
               Go to Dashboard
             </button>
@@ -45,10 +46,12 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <AppContent />
-          <ToastContainer />
-        </BrowserRouter>
+        <ThemeProvider>
+          <BrowserRouter>
+            <AppContent />
+            <Toaster />
+          </BrowserRouter>
+        </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );

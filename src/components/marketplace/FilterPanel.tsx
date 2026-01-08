@@ -28,7 +28,7 @@ function FilterCheckbox({
           id={id}
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
-          className="h-4 w-4 text-blue-600 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
+          className="h-4 w-4 text-system-accent rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-system-accent focus:ring-offset-0"
         />
       </div>
       <div className="flex-1">
@@ -118,7 +118,7 @@ export function FilterChips({
         }}
         className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
           officialOnly
-            ? "bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300"
+            ? "bg-system-accent/10 dark:bg-system-accent/20 border-system-accent/30 dark:border-system-accent/40 text-system-accent dark:text-system-accent"
             : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
         }`}
       >
@@ -133,7 +133,7 @@ export function FilterChips({
         }}
         className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
           communityOnly
-            ? "bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300"
+            ? "bg-system-accent/10 dark:bg-system-accent/20 border-system-accent/30 dark:border-system-accent/40 text-system-accent dark:text-system-accent"
             : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
         }`}
       >

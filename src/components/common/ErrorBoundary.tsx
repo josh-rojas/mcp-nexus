@@ -118,7 +118,7 @@ export class ErrorBoundary extends Component<Props, State> {
               If this error persists, please report it on{" "}
               <a
                 href="https://github.com/yourusername/mcp-nexus/issues"
-                className="text-blue-600 dark:text-blue-400 hover:underline"
+                className="text-system-accent dark:text-system-accent hover:underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >

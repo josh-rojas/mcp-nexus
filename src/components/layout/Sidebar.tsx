@@ -42,7 +42,7 @@ export function Sidebar() {
                   cn(
                     "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors",
                     isActive
-                      ? "bg-blue-600 text-white"
+                      ? "bg-system-accent text-white"
                       : "text-gray-300 hover:bg-gray-800 hover:text-white"
                   )
                 }
