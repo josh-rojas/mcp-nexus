@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import type { DetectedClient } from "../../types";
 import { notifyManualConfigCopied } from "../../lib/notifications";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface ManualConfigModalProps {
   client: DetectedClient | null;
@@ -26,10 +34,8 @@ export function ManualConfigModal({
     }
   }, [copied]);
 
-  if (!client) return null;
-
   const handleCopy = async () => {
-    if (configJson) {
+    if (configJson && client) {
       try {
         await navigator.clipboard.writeText(configJson);
         setCopied(true);
@@ -49,10 +55,9 @@ export function ManualConfigModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+    <Dialog open={!!client} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
+        <DialogHeader>
           <div className="flex items-center gap-3">
             <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
               <svg
@@ -64,33 +69,13 @@ export function ManualConfigModal({
               </svg>
             </div>
             <div>
-              <h2 className="text-lg font-medium text-gray-900 dark:text-white">
-                {client.name} Configuration
-              </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <DialogTitle>{client?.name} Configuration</DialogTitle>
+              <DialogDescription>
                 Manual configuration required
-              </p>
+              </DialogDescription>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-          >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
+        </DialogHeader>
 
         {/* Instructions */}
         <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-100 dark:border-amber-900/30">
@@ -110,15 +95,15 @@ export function ManualConfigModal({
             </svg>
             <div className="text-sm text-amber-800 dark:text-amber-200">
               <p className="font-medium mb-1">
-                {client.name} requires manual configuration
+                {client?.name} requires manual configuration
               </p>
               <ol className="list-decimal list-inside space-y-1 text-amber-700 dark:text-amber-300">
                 <li>Copy the configuration JSON below</li>
-                <li>Open {client.name} settings</li>
+                <li>Open {client?.name} settings</li>
                 <li>Navigate to the MCP configuration section</li>
                 <li>Paste the configuration and save</li>
               </ol>
-              {client.docsUrl && (
+              {client?.docsUrl && (
                 <a
                   href={client.docsUrl}
                   target="_blank"
@@ -146,7 +131,7 @@ export function ManualConfigModal({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto p-4">
+        <div className="flex-1 overflow-auto">
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
               <svg
@@ -183,8 +168,7 @@ export function ManualConfigModal({
           )}
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-3 p-4 border-t border-gray-200 dark:border-gray-700">
+        <DialogFooter>
           <button
             onClick={onClose}
             className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
@@ -232,8 +216,8 @@ export function ManualConfigModal({
               </>
             )}
           </button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
