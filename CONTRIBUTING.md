@@ -4,7 +4,7 @@
 
 ```bash
 # Clone and install dependencies
-git clone https://github.com/yourusername/mcp-nexus.git
+git clone https://github.com/josh-rojas/mcp-nexus.git
 cd mcp-nexus
 npm install
 

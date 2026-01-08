@@ -27,7 +27,7 @@ MCP Nexus is a desktop application that centralizes the management of MCP server
 
 ### Download
 
-1. Download the latest `.dmg` from [Releases](https://github.com/yourusername/mcp-nexus/releases)
+1. Download the latest `.dmg` from [Releases](https://github.com/josh-rojas/mcp-nexus/releases)
 2. Open the `.dmg` and drag MCP Nexus to Applications
 3. Launch MCP Nexus from Applications
 
@@ -206,8 +206,8 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/mcp-nexus/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/mcp-nexus/discussions)
+- **Issues**: [GitHub Issues](https://github.com/josh-rojas/mcp-nexus/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/josh-rojas/mcp-nexus/discussions)
 
 ## Roadmap
 
