@@ -13,8 +13,15 @@
     "windows": [
       {
         "title": "mcp-nexus",
-        "width": 800,
-        "height": 600
+        "width": 1024,
+        "height": 768,
+        "minWidth": 960,
+        "minHeight": 600,
+        "titleBarStyle": "Overlay",
+        "trafficLightPosition": {
+          "x": 16,
+          "y": 12
+        }
       }
     ],
     "security": {
