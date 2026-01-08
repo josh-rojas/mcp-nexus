@@ -127,26 +127,72 @@ Configure Vitest and React Testing Library (plus jsdom) in `package.json` and `v
 
 ---
 
-## Phase 2: Feature Testing & Validation (Smoke Tests Validate Implementations)
+## Phase 2: Feature Testing & Infrastructure (Critical Path) 🔄 **NEXT**
 
-**NOTE:** FEATURE-002, FEATURE-003, FEATURE-004 implementations are complete but lack automated test coverage. Smoke tests below validate correctness across critical flows.
+**NOTE:** FEATURE-002, FEATURE-003, FEATURE-004 implementations are complete but lack automated test coverage. Phase 2 focuses on infrastructure prerequisites for shadcn/ui, then validates features via smoke tests.
 
-### [ ] Step: DEV-GAP-001 – shadcn/ui setup & macOS theme integration
+**Critical Path Discovered:** GAP-013 and GAP-009 are prerequisites for shadcn/ui setup.
 
-Install shadcn/ui CLI, initialize component library, and configure Tailwind with macOS-specific theme (SF Pro fonts, system colors, dark mode support).
+### [ ] Step: GAP-013 – Tailwind Configuration (Default → shadcn/ui-Ready) ⚡ **START HERE**
+
+Create `tailwind.config.ts` with shadcn/ui preset, dark mode class strategy, custom animations, and macOS fonts (SF Pro).
 
 **Deliverables:**
-- `src/components/ui/` directory with shadcn component stubs (Button, Card, Dialog, etc.)
-- `tailwind.config.ts` updated with macOS theme (system fonts, spacing, colors)
-- Dark mode detection (prefers-color-scheme) in App.tsx
-- Documentation: `docs/ui-patterns.md` for component usage conventions
+- `tailwind.config.ts` with shadcn/ui configuration
+- Dark mode `["class"]` strategy (vs media query)
+- Custom `animate-slide-in` animation for Toast
+- macOS system font stack (`-apple-system`, `SF Pro Display/Text`, fallbacks)
+- CSS animation plugin integration
 
-### [ ] Step: FEATURE-005 – Servers & Marketplace smoke tests
+**Effort:** S (1–2 hrs)
+
+### [ ] Step: GAP-009 – Theme Provider & Dark Mode Context (Parallel with GAP-013)
+
+Create theme context and hooks for dark mode state management, decoupled from component styling.
+
+**Deliverables:**
+- `src/contexts/ThemeContext.ts` with Theme type (`"light" | "dark" | "system"`)
+- `src/hooks/useTheme.ts` hook to access/update theme
+- `<ThemeProvider>` wrapper component for App.tsx
+- System preference detection (`prefers-color-scheme` media query listener)
+- localStorage persistence (`theme` key)
+- `document.documentElement.classList` toggling for Tailwind dark mode
+
+**Effort:** S (2–3 hrs)
+
+### [ ] Step: DEV-GAP-001 – shadcn/ui setup & macOS theme integration (Depends on GAP-013 + GAP-009)
+
+Install shadcn/ui CLI, initialize component library, and integrate with theme provider.
+
+**Deliverables:**
+- `src/components/ui/` directory with shadcn component stubs (Button, Card, Dialog, Input, Select, Badge, Toast, etc.)
+- shadcn/ui integration with custom Tailwind config (GAP-013)
+- Theme provider context integration (GAP-009)
+- Documentation: `docs/ui-patterns.md` for component usage conventions
+- Optional: lucide-react for icon library
+
+**Effort:** M (4–6 hrs)
+
+### [ ] Step: GAP-010 – Toast Component Replacement (Custom → shadcn/ui) (Depends on GAP-001)
+
+Replace custom `Toast.tsx` with shadcn/ui Toast + Toaster components, migrate notification store logic.
+
+**Deliverables:**
+- Replace `src/components/common/Toast.tsx` with shadcn/ui Toaster component
+- Update `notificationStore.ts` to use shadcn/ui `toast()` API (or bridge layer for backward compatibility)
+- Migrate hardcoded color styling to shadcn/ui variants (success/error/warning/info)
+- Ensure animations work with new Tailwind config
+
+**Effort:** S (2–4 hrs)
+
+### [ ] Step: FEATURE-005 – Servers & Marketplace smoke tests (Depends on GAP-010)
 
 Implement smoke tests for the Servers and Marketplace pages that cover:
-- Server install/uninstall (validates FEATURE-002 notifications)
+- Server install/uninstall (validates FEATURE-002 notifications via shadcn/ui Toast)
 - Marketplace browsing and detail modal (validates FEATURE-004 copy/branding)
 - Server sync workflow (validates FEATURE-002 success/error toasts)
+
+**Effort:** M (4–6 hrs)
 
 ### [ ] Step: FEATURE-005 – Clients, Settings, and FirstRun smoke tests
 
@@ -156,15 +202,20 @@ Implement smoke tests for:
 - First-run import behavior (validates FEATURE-004 config path references)
 - Dashboard quick-action flows
 
+**Effort:** M (4–6 hrs)
+
 ### [ ] Step: Validation Gate after FEATURE-005
 
-Run `npm run lint`, `npm run typecheck`, and `npm test -- --run` to confirm the new frontend test harness and smoke tests pass, validating FEATURE-002/003/004 implementations.
+Run `npm run lint`, `npm run typecheck`, and `npm test -- --run` to confirm all smoke tests pass and shadcn/ui integration is stable.
 
 **Success Criteria:**
 - ✅ All smoke tests pass (Servers, Marketplace, Clients, Settings, FirstRun)
-- ✅ Test coverage for notification emissions across all critical flows
+- ✅ Test coverage for notification emissions (shadcn/ui Toast verified)
 - ✅ Branding string validation in rendered output
 - ✅ Auto-sync toggle UI state verified
+- ✅ Theme provider context accessible in all components
+- ✅ Dark mode toggle works (system preference + localStorage persistence)
+- ✅ No linting errors, typecheck passes
 
 ---
 

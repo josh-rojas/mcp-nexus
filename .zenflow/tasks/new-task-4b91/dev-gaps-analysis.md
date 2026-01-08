@@ -277,6 +277,279 @@ Replace all `console.*` calls with `logger.*`. Ensure no sensitive data is logge
 
 ---
 
+## Additional Gaps Discovered During Codebase Audit
+
+### GAP-009: Theme Provider & Dark Mode Context ✅ **CRITICAL – BLOCKS DEV-GAP-001**
+**Status:** Prerequisite for DEV-GAP-001 (shadcn/ui setup)
+**Severity:** P1 (Critical)
+
+**Problem:**
+- `App.tsx` has no theme context provider (required for shadcn/ui + dark mode)
+- No way to share dark mode state across components via React context
+- QueryClient created as global singleton in App.tsx with no theme awareness
+- No `<html class="dark">` toggling mechanism for Tailwind dark mode
+
+**Current Gap:**
+```typescript
+// App.tsx – Missing theme provider
+function App() {
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <AppContent />
+          <ToastContainer />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+}
+```
+
+**Solution:**
+1. Create `src/contexts/ThemeContext.ts`:
+   ```typescript
+   export type Theme = "light" | "dark" | "system";
+   
+   interface ThemeContextValue {
+     theme: Theme;
+     resolvedTheme: "light" | "dark";
+     setTheme: (theme: Theme) => void;
+   }
+   
+   export const ThemeContext = createContext<ThemeContextValue>(null!);
+   ```
+
+2. Create `src/hooks/useTheme.ts` to consume context
+
+3. Wrap App with `<ThemeProvider>` at root level
+
+4. Update App.tsx to toggle `document.documentElement.classList` on theme change
+
+**Effort:** S (2–3 hrs) | **Blocker:** **Unblocks DEV-GAP-001 and GAP-006**
+
+---
+
+### GAP-010: Toast Component Replacement (Custom → shadcn/ui) ✅ **CRITICAL**
+**Status:** Depends on DEV-GAP-001 (shadcn/ui setup)
+**Severity:** P1 (Critical)
+
+**Problem:**
+- Custom `Toast.tsx` uses hardcoded Tailwind colors (`bg-green-50 dark:bg-green-900/30`, etc.)
+- Won't respect shadcn/ui theme variables (CSS custom properties)
+- Custom animation `animate-slide-in` won't exist after shadcn/ui Tailwind config override
+- Toast styling is duplicated from ErrorBoundary with different color scheme
+
+**Current Implementation:**
+```typescript
+// src/components/common/Toast.tsx
+const typeStyles: Record<NotificationType, { bg: string; ...}> = {
+  success: {
+    bg: "bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800",
+    icon: "✓",
+    ...
+  },
+  // ...
+};
+```
+
+**Solution:**
+1. Replace with `shadcn/ui` Toast + Toaster component after DEV-GAP-001
+2. Use `toast()` API instead of Zustand store (keep store for backward compatibility during transition)
+3. Leverage shadcn/ui variant system for success/error/warning/info styling
+
+**Effort:** S (2–4 hrs) | **Blocker:** DEV-GAP-001 (shadcn/ui setup)
+
+---
+
+### GAP-011: Modal Components (Custom → shadcn/ui Dialog) ✅ **IMPORTANT**
+**Status:** Depends on DEV-GAP-001
+**Severity:** P2 (Should Have)
+
+**Problem:**
+- 3 custom modal components using controlled `isOpen` prop: `AddServerModal`, `ServerDetailModal`, `ManualConfigModal`
+- All likely use custom overlay/backdrop styling (hardcoded Tailwind)
+- No consistent modal behavior (animations, focus management, keyboard handling)
+- Accessibility concerns (no focus trap, no role="dialog", no aria-modal)
+
+**Affected Files:**
+- `src/components/servers/AddServerModal.tsx`
+- `src/components/marketplace/ServerDetailModal.tsx`
+- `src/components/clients/ManualConfigModal.tsx`
+
+**Solution:**
+1. After DEV-GAP-001, replace modals with shadcn/ui `Dialog` component
+2. Update modal signatures from `isOpen` + `onClose` to use Dialog's native state management
+3. Leverage `DialogContent`, `DialogHeader`, `DialogFooter` for consistent styling
+4. Gain built-in accessibility (focus trap, aria-modal, keyboard handling)
+
+**Effort:** M (4–6 hrs) | **Blocker:** DEV-GAP-001 (shadcn/ui setup)
+
+---
+
+### GAP-012: Icon System (Inline SVG → Icon Library) ✅ **NICE TO HAVE**
+**Status:** Deferred to Phase 3
+**Severity:** P2 (Nice to Have)
+
+**Problem:**
+- `Sidebar.tsx` defines icons as inline SVG JSX (verbose, unmaintainable)
+- No icon library (e.g., lucide-react, radix-icons) – common with shadcn/ui apps
+- Hard to reuse icons across components
+- Icon styling inconsistent (hardcoded `w-5 h-5`, etc.)
+
+**Current Implementation:**
+```typescript
+// src/components/layout/Sidebar.tsx
+const icons: Record<string, ReactNode> = {
+  grid: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path ... />
+    </svg>
+  ),
+  // ... 10+ more icons defined inline
+};
+```
+
+**Solution:**
+1. Install `lucide-react` (standard with shadcn/ui)
+2. Replace inline SVGs with lucide components: `<Grid2x2 className="w-5 h-5" />`
+3. Create `src/components/icons/` for project-specific icon variants
+4. Update all icon usage across components
+
+**Effort:** S (2–4 hrs) | **Blocker:** None; can follow DEV-GAP-001
+
+---
+
+### GAP-013: Tailwind Configuration (Default → shadcn/ui-Ready) ✅ **CRITICAL**
+**Status:** Prerequisite for DEV-GAP-001
+**Severity:** P1 (Critical)
+
+**Problem:**
+- No `tailwind.config.ts` or `tailwind.config.js` in repo (using Tailwind defaults)
+- No shadcn/ui preset configuration
+- No dark mode configuration (light/dark class strategy vs media query)
+- No custom animations (e.g., `animate-slide-in` referenced in Toast.tsx doesn't exist in defaults)
+- No custom spacing/colors aligned with macOS design language
+- No CSS variables setup for theme-aware component styling
+
+**Impact:**
+- shadcn/ui setup won't have proper CSS variable layer
+- Dark mode won't inherit from design tokens
+- Custom animations will fail
+- Component colors will be hardcoded instead of using semantic tokens
+
+**Solution:**
+Create `tailwind.config.ts`:
+```typescript
+import type { Config } from "tailwindcss";
+import defaultConfig from "tailwindcss/defaultConfig";
+
+const config = {
+  darkMode: ["class"],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: [
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"SF Pro Display"',
+          '"SF Pro Text"',
+          "Helvetica Neue",
+          "sans-serif",
+        ],
+      },
+      colors: {
+        // macOS system colors (will be overridden by shadcn/ui)
+      },
+      keyframes: {
+        "slide-in": {
+          from: { transform: "translateY(100%)", opacity: "0" },
+          to: { transform: "translateY(0)", opacity: "1" },
+        },
+      },
+      animation: {
+        "slide-in": "slide-in 0.3s ease-out",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config;
+
+export default config;
+```
+
+**Effort:** S (1–2 hrs) | **Blocker:** **Required before DEV-GAP-001**
+
+---
+
+### GAP-014: Missing cn() Clsx Replacement ✅ **NICE TO HAVE**
+**Status:** Phase 3
+**Severity:** P2 (Nice to Have)
+
+**Problem:**
+- `src/lib/utils.ts` implements custom `cn()` that just filters and joins strings
+- shadcn/ui projects typically use `clsx` or `classnames` for better conditional class handling
+- Current `cn()` doesn't support object/array syntax: `cn({ "p-4": true, "bg-blue": active })`
+
+**Current Implementation:**
+```typescript
+export function cn(...classes: (string | boolean | undefined)[]): string {
+  return classes.filter(Boolean).join(" ");
+}
+```
+
+**Solution:**
+Install `clsx`:
+```bash
+npm install clsx
+```
+
+Replace `cn()` with clsx import:
+```typescript
+import clsx from "clsx";
+
+export const cn = clsx; // or create wrapper
+```
+
+**Effort:** S (< 1 hr) | **Blocker:** None
+
+---
+
+## Revised Dependency Matrix (Updated)
+
+| Gap | Blocks | Blocked By | Phase | Priority |
+|-----|--------|-----------|-------|----------|
+| **GAP-009 (Theme Context)** | **GAP-010, GAP-001** | **None** | **2** | **CRITICAL** |
+| **GAP-013 (Tailwind Config)** | **GAP-001** | **None** | **2** | **CRITICAL** |
+| GAP-001 (shadcn/ui) | GAP-010, GAP-011, GAP-012 | GAP-009, GAP-013 | 2 | P1 |
+| GAP-002 (Tests) | None | FEATURE-005 harness | 2 | P1 |
+| GAP-010 (Toast) | None | GAP-001 | 2 | P1 |
+| GAP-011 (Modals) | None | GAP-001 | 3 | P2 |
+| GAP-003 (Error boundary tests) | None | None | 3 | P2 |
+| GAP-004 (A11y) | None | None | 3 | P2 |
+| **GAP-006 (Dark mode)** | **None** | **GAP-009** | **3** | **P1** |
+| GAP-005 (Dark mode tests) | None | GAP-006 | 3 | P2 |
+| GAP-007 (Env config) | GAP-008 | None | 3 | P2 |
+| GAP-008 (Logging) | None | None | 3 | P2 |
+| GAP-012 (Icons) | None | GAP-001 | 3 | P2 |
+| GAP-014 (clsx) | None | None | 3 | P2 |
+
+---
+
+## Critical Path (Updated)
+
+```
+GAP-013 (Tailwind Config) ────┐
+                              ├─→ GAP-001 (shadcn/ui) ──→ GAP-010 (Toast) ──→ FEATURE-005 Tests
+                              │
+GAP-009 (Theme Context) ──────┘
+
+GAP-009 also unblocks: GAP-006 (Dark Mode Detection)
+```
+
+---
+
 ## Dependency Matrix
 
 | Gap | Blocks | Blocked By | Phase |
