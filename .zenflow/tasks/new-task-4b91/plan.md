@@ -81,7 +81,8 @@ Implement a debounced auto-sync mechanism on the frontend that, when enabled, tr
 
 Add tests around preference persistence and auto-sync trigger logic, then manually verify that enabling/disabling the flag toggles background sync behavior as expected.
 
-### [ ] Step: Validation Gate after FEATURE-003
+### [x] Step: Validation Gate after FEATURE-003
+<!-- chat-id: 4bc95bf1-ff4b-4f36-aac2-9ce1910fb6f3 -->
 
 Run `npm run lint`, `npm run typecheck`, and `cd src-tauri && cargo test` (if backend touched) to ensure no regressions before starting FEATURE-004.
 
