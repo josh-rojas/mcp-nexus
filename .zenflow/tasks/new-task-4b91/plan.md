@@ -51,29 +51,89 @@ Save to `{@artifacts_path}/plan.md`. If the feature is trivial and doesn't warra
 
 ---
 
-### [ ] Step: Implement FEATURE-001 Marketplace Install Flow
+### [ ] Step: FEATURE-001 – Install mapping helper & type alignment
 
-Implement `installMapping` helper, `useInstallFromMarketplace` hook, and wire Marketplace UI to invoke the existing `install_mcp_server` command end-to-end (central config + client sync).
+Design and implement a TS mapping helper that converts `MarketplaceServer` plus client/transport selections into a valid `InstallServerRequest`, ensuring TS types remain aligned with Rust models.
 
-### [ ] Step: Implement FEATURE-002 Toast Notifications
+### [ ] Step: FEATURE-001 – useInstallFromMarketplace hook
 
-Add `notifications` helper module and integrate success/error toasts for server install/uninstall, sync operations, Marketplace install, and credential operations.
+Add a dedicated `useInstallFromMarketplace` mutation in `useMarketplace` that consumes the mapping helper, calls `install_mcp_server`, and invalidates `servers`, `clients/statuses`, and `updates` queries on success.
 
-### [ ] Step: Implement FEATURE-003 Auto-Sync Preference
+### [ ] Step: FEATURE-001 – Marketplace UI wiring & UX
 
-Extend config models for `autoSyncOnChanges`, bind the Settings toggle to persisted state, and add debounced auto-sync triggering on server changes.
+Wire `ServerDetailModal` and the `Marketplace` page to the new hook, thread through transport mode and SSE URL, surface loading/error states, and close the modal only on successful installation.
 
-### [ ] Step: Implement FEATURE-004 Naming & Config Path Consistency
+### [ ] Step: FEATURE-001 – Marketplace install tests & manual verification
 
-Update UI strings and documentation to consistently use “MCP Nexus” and `~/.mcp-nexus/config.json`, leaving keychain internals unchanged for compatibility.
+Add TS tests for the mapping helper plus at least one Marketplace install smoke test, then manually verify end-to-end installs for npm/uvx/docker/remote sources.
 
-### [ ] Step: Implement FEATURE-005 Frontend Smoke Tests
+### [ ] Step: FEATURE-002 – Notification helper module
 
-Configure Vitest + React Testing Library and add smoke tests for Servers, Marketplace, Clients, Settings/Credentials, and FirstRun flows.
+Introduce a `notifications` helper module that wraps `showSuccess`/`showError`/`showWarning`/`showInfo` with semantic functions for installs, uninstalls, syncs, and credential operations, avoiding exposure of secrets.
 
-### [ ] Step: Implement FEATURE-006 Marketplace Details Hook
+### [ ] Step: FEATURE-002 – Servers & Marketplace toast integration
 
-Implement `useServerDetails` using `get_server_details` and enhance `ServerDetailModal` to consume richer detail data with graceful fallback.
+Integrate notification helpers into Servers and Marketplace flows so server install/uninstall and Marketplace install paths consistently emit success/error toasts.
+
+### [ ] Step: FEATURE-002 – Clients & credential toast integration
+
+Integrate notification helpers into Clients sync operations and `CredentialManager` create/delete flows, ensuring completion/failure states are clearly surfaced.
+
+### [ ] Step: FEATURE-002 – Notification behavior tests
+
+Add focused tests around notification helpers and at least one UI-level assertion per critical flow to validate that expected notifications are emitted.
+
+### [ ] Step: FEATURE-003 – Auto-sync preference modeling (Rust/TS)
+
+Extend `UserPreferences` in Rust and TS with an `autoSyncOnChanges` flag, maintain backwards-compatible defaults, and expose the preference via existing config commands.
+
+### [ ] Step: FEATURE-003 – Settings UI binding for auto-sync
+
+Bind the Settings “Auto-sync on changes” checkbox to the persisted preference using a config hook, handling loading/disabled states and error conditions.
+
+### [ ] Step: FEATURE-003 – Auto-sync triggering on server changes
+
+Implement a debounced auto-sync mechanism on the frontend that, when enabled, triggers a Sync All after relevant server mutations (install/uninstall/toggle) while reusing existing sync commands and notifications.
+
+### [ ] Step: FEATURE-003 – Auto-sync tests & behavior verification
+
+Add tests around preference persistence and auto-sync trigger logic, then manually verify that enabling/disabling the flag toggles background sync behavior as expected.
+
+### [ ] Step: FEATURE-004 – Branding & config path updates in UI
+
+Update UI components (Sidebar, Settings, FirstRun, page metadata) so all user-facing app-name and central-config-path references use “MCP Nexus” and `~/.mcp-nexus/config.json`.
+
+### [ ] Step: FEATURE-004 – Branding & config path updates in docs
+
+Review README and relevant docs for residual “MCP Manager” / `~/.mcp-manager` references and update them or add clarifying migration notes where appropriate.
+
+### [ ] Step: FEATURE-004 – Branding verification sweep
+
+Run a repo-wide search to confirm no incorrect user-facing branding or config-path references remain, explicitly excluding intentional keychain internals.
+
+### [ ] Step: FEATURE-005 – Vitest & RTL harness setup
+
+Configure Vitest and React Testing Library (plus jsdom) in `package.json` and `vitest.config.ts`, including a shared `src/test/setup.ts` that mocks Tauri `invoke`.
+
+### [ ] Step: FEATURE-005 – Servers & Marketplace smoke tests
+
+Implement smoke tests for the Servers and Marketplace pages that cover server install/sync and Marketplace install flows (post FEATURE-001 wiring).
+
+### [ ] Step: FEATURE-005 – Clients, Settings, and FirstRun smoke tests
+
+Implement smoke tests for Clients sync, credential create/delete in Settings, and first-run import behavior, ensuring they rely on mocked backends only.
+
+### [ ] Step: FEATURE-006 – useServerDetails hook implementation
+
+Replace the stubbed `useServerDetails` with a real React Query hook that calls `get_server_details`, keyed per server name and respecting Marketplace cache semantics.
+
+### [ ] Step: FEATURE-006 – ServerDetailModal detail integration
+
+Enhance `ServerDetailModal` to consume `useServerDetails`, prefer richer metadata when available, and degrade gracefully to list data on errors.
+
+### [ ] Step: FEATURE-006 – Details hook tests & UX verification
+
+Add tests for `useServerDetails` query behavior and a UI-level assertion for the detail modal, then manually inspect a few Marketplace entries to validate UX and error resilience.
 
 ### [ ] Step: Final Verification & Report
 
