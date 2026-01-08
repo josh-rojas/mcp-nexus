@@ -101,7 +101,7 @@ export function Sidebar() {
   return (
     <aside className="w-64 bg-gray-900 text-white flex flex-col">
       <div className="p-4 border-b border-gray-800">
-        <h1 className="text-xl font-bold">MCP Manager</h1>
+        <h1 className="text-xl font-bold">MCP Nexus</h1>
       </div>
       <nav className="flex-1 p-4">
         <ul className="space-y-2">

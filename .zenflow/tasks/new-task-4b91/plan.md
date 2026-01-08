@@ -86,7 +86,7 @@ Add tests around preference persistence and auto-sync trigger logic, then manual
 
 Run `npm run lint`, `npm run typecheck`, and `cd src-tauri && cargo test` (if backend touched) to ensure no regressions before starting FEATURE-004.
 
-### [ ] Step: FEATURE-004 – Branding & config path updates in UI
+### [x] Step: FEATURE-004 – Branding & config path updates in UI
 <!-- chat-id: 1b2c266d-edee-4d3c-ae95-4c69121e97a2 -->
 
 Update UI components (Sidebar, Settings, FirstRun, page metadata) so all user-facing app-name and central-config-path references use “MCP Nexus” and `~/.mcp-nexus/config.json`.

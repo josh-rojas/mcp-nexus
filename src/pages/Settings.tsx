@@ -26,7 +26,7 @@ export function Settings() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <Header title="Settings" subtitle="Configure MCP Manager" />
+      <Header title="Settings" subtitle="Configure MCP Nexus" />
       <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-y-auto">
         <div className="max-w-2xl space-y-6">
           <EnvironmentStatus />
@@ -208,7 +208,7 @@ export function Settings() {
               Config Location
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 font-mono">
-              ~/.mcp-manager/config.json
+              ~/.mcp-nexus/config.json
             </p>
           </section>
         </div>

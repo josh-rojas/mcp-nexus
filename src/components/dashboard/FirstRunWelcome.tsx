@@ -105,7 +105,7 @@ export function FirstRunWelcome() {
           </svg>
         </div>
         <div className="flex-1">
-          <h2 className="text-2xl font-bold mb-2">Welcome to MCP Manager</h2>
+          <h2 className="text-2xl font-bold mb-2">Welcome to MCP Nexus</h2>
           <p className="text-blue-100 mb-4">
             Manage all your MCP servers from one central location. Install
             servers once and sync them to all your AI clients.
