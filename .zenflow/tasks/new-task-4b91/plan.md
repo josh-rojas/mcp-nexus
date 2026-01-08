@@ -49,7 +49,8 @@ Rule of thumb for step size: each step should represent a coherent unit of work 
 
 Save to `{@artifacts_path}/plan.md`. If the feature is trivial and doesn't warrant this breakdown, keep the Implementation step below as is.
 
-### [ ] Step: FEATURE-002 – Notification helper module
+### [x] Step: FEATURE-002 – Notification helper module
+<!-- chat-id: 685b9b1b-1818-4715-9604-529432f4d732 -->
 
 Introduce a `notifications` helper module that wraps `showSuccess`/`showError`/`showWarning`/`showInfo` with semantic functions for installs, uninstalls, syncs, and credential operations, avoiding exposure of secrets.
 
