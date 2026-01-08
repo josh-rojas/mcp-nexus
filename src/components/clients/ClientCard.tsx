@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Loader2, RefreshCw, Copy } from "lucide-react";
+import {
+  Loader2,
+  RefreshCw,
+  Copy,
+  Monitor,
+  Terminal,
+  Code,
+  Play,
+  Wind,
+  Server as ServerIcon,
+} from "lucide-react";
 import type { DetectedClient, ClientId } from "../../types";
 
 interface ClientCardProps {
@@ -21,55 +31,22 @@ function ClientIcon({ clientId }: { clientId: ClientId }) {
 
   switch (clientId) {
     case "claude-code":
-      return (
-        <svg className={iconClass} viewBox="0 0 24 24" fill="currentColor">
-          <path d="M4 17l6-6-6-6 2-2 8 8-8 8-2-2z" />
-          <path d="M12 19h8v2h-8z" />
-        </svg>
-      );
+      return <Code className={iconClass} />;
     case "claude-desktop":
-      return (
-        <svg className={iconClass} viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h6l-2 2v2h8v-2l-2-2h6c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H4V4h16v12z" />
-        </svg>
-      );
+      return <Monitor className={iconClass} />;
     case "cursor":
     case "vscode":
-      return (
-        <svg className={iconClass} viewBox="0 0 24 24" fill="currentColor">
-          <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
-        </svg>
-      );
+      return <Code className={iconClass} />;
     case "cline":
-      return (
-        <svg className={iconClass} viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2zm-3 9a1 1 0 100 2 1 1 0 000-2zm6 0a1 1 0 100 2 1 1 0 000-2z" />
-        </svg>
-      );
+      return <Terminal className={iconClass} />;
     case "continue":
-      return (
-        <svg className={iconClass} viewBox="0 0 24 24" fill="currentColor">
-          <path d="M8 5v14l11-7L8 5z" />
-        </svg>
-      );
+      return <Play className={iconClass} />;
     case "windsurf":
-      return (
-        <svg className={iconClass} viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12.5 2C9.64 2 7.21 3.79 6.3 6.28L2 12l4.3 5.72C7.21 20.21 9.64 22 12.5 22c3.31 0 6-2.69 6-6V8c0-3.31-2.69-6-6-6zm0 18c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z" />
-        </svg>
-      );
+      return <Wind className={iconClass} />;
     case "warp":
-      return (
-        <svg className={iconClass} viewBox="0 0 24 24" fill="currentColor">
-          <path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h8v2H8V8zm0 4h8v2H8v-2z" />
-        </svg>
-      );
+      return <Terminal className={iconClass} />;
     default:
-      return (
-        <svg className={iconClass} viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-        </svg>
-      );
+      return <ServerIcon className={iconClass} />;
   }
 }
 
