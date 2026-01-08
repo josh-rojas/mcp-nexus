@@ -1,4 +1,4 @@
-import { env } from "./env";
+import { isDevelopment } from "./env";
 
 /**
  * Structured Logger Utility
@@ -53,10 +53,13 @@ const MAX_PAYLOAD_SIZE = 1000;
  */
 function getConfiguredLogLevel(): LogLevel {
   // Debug logs only in development
-  if (env.isDev && env.debugTauri) {
+  const isDevMode = isDevelopment();
+  const debugTauri = import.meta.env.VITE_DEBUG_TAURI === "true";
+
+  if (isDevMode && debugTauri) {
     return "debug";
   }
-  return env.isDev ? "info" : "warn";
+  return isDevMode ? "info" : "warn";
 }
 
 /**

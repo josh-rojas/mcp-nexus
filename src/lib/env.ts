@@ -1,133 +1,145 @@
 /**
- * Environment variable validation and type-safe access
- * Validates environment variables on application startup
+ * Environment Variable Validation Utility
+ *
+ * Validates required environment variables at application startup
+ * and provides type-safe access to environment configuration.
  */
 
 /**
- * Parse boolean from string (supports true/false/1/0/yes/no)
+ * Environment configuration schema
  */
-function parseBoolean(
-  value: string | undefined,
-  defaultValue: boolean
-): boolean {
-  if (value === undefined) return defaultValue;
-  const normalized = value.toLowerCase().trim();
-  return ["true", "1", "yes"].includes(normalized);
+interface EnvironmentConfig {
+  /** Log level for application logging */
+  logLevel: "debug" | "info" | "warn" | "error";
+  /** Whether the app is running in production mode */
+  isProduction: boolean;
+  /** Whether the app is running in development mode */
+  isDevelopment: boolean;
+  /** Whether the app is running in test mode */
+  isTest: boolean;
 }
 
 /**
- * Parse number from string with validation
+ * Environment variable validation errors
  */
-function parseNumber(
-  value: string | undefined,
-  defaultValue: number,
-  min?: number,
-  max?: number
-): number {
-  if (value === undefined) return defaultValue;
-  const parsed = Number(value);
+export class EnvironmentValidationError extends Error {
+  constructor(
+    message: string,
+    public readonly missingVars: string[] = [],
+    public readonly invalidVars: string[] = []
+  ) {
+    super(message);
+    this.name = "EnvironmentValidationError";
+  }
+}
 
-  if (isNaN(parsed)) {
+/**
+ * Validate log level value
+ */
+function validateLogLevel(
+  level: string | undefined
+): "debug" | "info" | "warn" | "error" {
+  const validLevels = ["debug", "info", "warn", "error"];
+  const defaultLevel = "info";
+
+  if (!level) {
+    return defaultLevel;
+  }
+
+  const normalized = level.toLowerCase();
+  if (!validLevels.includes(normalized)) {
     console.warn(
-      `Invalid number value: ${value}, using default: ${defaultValue}`
+      `Invalid log level "${level}". Must be one of: ${validLevels.join(", ")}. Using default: ${defaultLevel}`
     );
-    return defaultValue;
+    return defaultLevel;
   }
 
-  if (min !== undefined && parsed < min) {
-    console.warn(`Value ${parsed} below minimum ${min}, using minimum`);
-    return min;
-  }
-
-  if (max !== undefined && parsed > max) {
-    console.warn(`Value ${parsed} above maximum ${max}, using maximum`);
-    return max;
-  }
-
-  return parsed;
+  return normalized as "debug" | "info" | "warn" | "error";
 }
 
 /**
- * Validate URL format
+ * Detect environment mode
  */
-function parseUrl(value: string | undefined, defaultValue: string): string {
-  if (value === undefined) return defaultValue;
+function getMode(): "production" | "development" | "test" {
+  const mode = import.meta.env.MODE;
 
-  try {
-    new URL(value);
-    return value;
-  } catch {
-    console.warn(`Invalid URL: ${value}, using default: ${defaultValue}`);
-    return defaultValue;
-  }
+  if (mode === "test") return "test";
+  if (mode === "production") return "production";
+  return "development";
 }
 
 /**
- * Validated and typed environment variables
+ * Validate all environment variables and return configuration
+ *
+ * @throws {EnvironmentValidationError} If validation fails
  */
-export const env = {
-  // Development variables
-  debugTauri: parseBoolean(import.meta.env.VITE_DEBUG_TAURI, false),
-  apiTimeout: parseNumber(
-    import.meta.env.VITE_API_TIMEOUT,
-    30000,
-    1000,
-    120000
-  ),
-  marketplaceUrl: parseUrl(
-    import.meta.env.VITE_MARKETPLACE_URL,
-    "https://registry.pulsemcp.com"
-  ),
-  enableDevtools: parseBoolean(
-    import.meta.env.VITE_ENABLE_DEVTOOLS,
-    import.meta.env.DEV
-  ),
+export function validateEnvironment(): EnvironmentConfig {
+  const mode = getMode();
+  const logLevel = validateLogLevel(import.meta.env.VITE_LOG_LEVEL);
 
-  // Build variables
-  appVersion: import.meta.env.VITE_APP_VERSION || "0.1.0",
-  buildDate: import.meta.env.VITE_BUILD_DATE || new Date().toISOString(),
-  sentryDsn: import.meta.env.VITE_SENTRY_DSN,
+  const config: EnvironmentConfig = {
+    logLevel,
+    isProduction: mode === "production",
+    isDevelopment: mode === "development",
+    isTest: mode === "test",
+  };
 
-  // Runtime detection
-  mode: import.meta.env.MODE,
-  isDev: import.meta.env.DEV,
-  isProd: import.meta.env.PROD,
-  isTauri: "__TAURI__" in window,
-} as const;
+  return config;
+}
 
 /**
- * Log environment configuration on startup (development only)
+ * Get environment configuration (validates on first call)
+ *
+ * @throws {EnvironmentValidationError} If validation fails
  */
-export function logEnvironment(): void {
-  if (!env.isDev) return;
+let cachedConfig: EnvironmentConfig | null = null;
 
-  console.log("🔧 Environment Configuration:", {
-    mode: env.mode,
-    debugTauri: env.debugTauri,
-    apiTimeout: env.apiTimeout,
-    marketplaceUrl: env.marketplaceUrl,
-    enableDevtools: env.enableDevtools,
-    appVersion: env.appVersion,
-    isTauri: env.isTauri,
+export function getEnvironment(): EnvironmentConfig {
+  if (!cachedConfig) {
+    cachedConfig = validateEnvironment();
+  }
+  return cachedConfig;
+}
+
+/**
+ * Check if running in production mode
+ */
+export function isProduction(): boolean {
+  return getEnvironment().isProduction;
+}
+
+/**
+ * Check if running in development mode
+ */
+export function isDevelopment(): boolean {
+  return getEnvironment().isDevelopment;
+}
+
+/**
+ * Check if running in test mode
+ */
+export function isTest(): boolean {
+  return getEnvironment().isTest;
+}
+
+/**
+ * Get log level configuration
+ */
+export function getLogLevel(): "debug" | "info" | "warn" | "error" {
+  return getEnvironment().logLevel;
+}
+
+/**
+ * Log environment configuration summary
+ */
+export function logEnvironmentInfo(): void {
+  const config = getEnvironment();
+  console.log("Environment Configuration:", {
+    mode: config.isProduction
+      ? "production"
+      : config.isDevelopment
+        ? "development"
+        : "test",
+    logLevel: config.logLevel,
   });
-}
-
-/**
- * Validate required environment variables
- * Throws error if critical variables are missing or invalid
- */
-export function validateEnvironment(): void {
-  const errors: string[] = [];
-
-  // Add required variable checks here if needed
-  // Currently all variables have defaults, so no required validation
-
-  if (errors.length > 0) {
-    throw new Error(
-      `Environment validation failed:\n${errors.map((e) => `  - ${e}`).join("\n")}`
-    );
-  }
-
-  // Log configuration in development
-  logEnvironment();
 }
