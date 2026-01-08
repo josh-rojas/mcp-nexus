@@ -12,7 +12,6 @@ import type { ClientId, DetectedClient, SyncResult } from "../types";
 import {
   notifyClientSyncError,
   notifyClientSyncSuccess,
-  notifyManualConfigCopied,
   notifySyncAllError,
   notifySyncAllSuccess,
 } from "../lib/notifications";

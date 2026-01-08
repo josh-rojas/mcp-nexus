@@ -109,9 +109,21 @@ Run `npm run lint` and `npm run typecheck` to ensure UI-only branding changes ar
 
 **Results:** All Rust backend tests pass (103/103 ✅). TypeScript tests skipped due to pre-existing missing dependencies (unrelated to branding changes).
 
-### [ ] Step: FEATURE-005 – Vitest & RTL harness setup
+### [x] Step: FEATURE-005 – Vitest & RTL harness setup
+<!-- chat-id: 650ed538-7898-4dbd-a95e-4403abeba27c -->
 
 Configure Vitest and React Testing Library (plus jsdom) in `package.json` and `vitest.config.ts`, including a shared `src/test/setup.ts` that mocks Tauri `invoke`.
+
+**Implementation Complete:**
+- ✅ Added Vitest `^1.0.4`, React Testing Library `^16.0.0`, jsdom `^23.0.1` to devDependencies
+- ✅ Created `vitest.config.ts` with jsdom environment, global test utilities, coverage settings
+- ✅ Created `src/test/setup.ts` with Tauri API mocking (`invoke`, plugin-opener) and helper functions
+- ✅ Created `src/test/utils.tsx` with `renderWithProviders` (QueryClient + BrowserRouter wrapper) and common RTL exports
+- ✅ Added `test`, `test:ui`, `test:coverage` npm scripts
+- ✅ Verified setup with smoke test in `src/test/setup.test.ts` (4/4 tests passing ✅)
+- ✅ All linting passes (no errors, intentional warnings suppressed for test utilities)
+- ✅ TypeScript type checking passes
+- ✅ Ready for smoke test implementation in next step
 
 ### [ ] Step: FEATURE-005 – Servers & Marketplace smoke tests
 
