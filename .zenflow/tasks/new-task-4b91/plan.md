@@ -115,7 +115,7 @@ Run `npm run lint` and `npm run typecheck` to ensure UI-only branding changes ar
 Configure Vitest and React Testing Library (plus jsdom) in `package.json` and `vitest.config.ts`, including a shared `src/test/setup.ts` that mocks Tauri `invoke`.
 
 **Implementation Complete:**
-- ✅ Added Vitest `^1.0.4`, React Testing Library `^16.0.0`, jsdom `^23.0.1` to devDependencies
+- ✅ Added Vitest `1.6.1`, React Testing Library `16.3.1`, jsdom `23.2.0` to devDependencies
 - ✅ Created `vitest.config.ts` with jsdom environment, global test utilities, coverage settings
 - ✅ Created `src/test/setup.ts` with Tauri API mocking (`invoke`, plugin-opener) and helper functions
 - ✅ Created `src/test/utils.tsx` with `renderWithProviders` (QueryClient + BrowserRouter wrapper) and common RTL exports
@@ -123,19 +123,52 @@ Configure Vitest and React Testing Library (plus jsdom) in `package.json` and `v
 - ✅ Verified setup with smoke test in `src/test/setup.test.ts` (4/4 tests passing ✅)
 - ✅ All linting passes (no errors, intentional warnings suppressed for test utilities)
 - ✅ TypeScript type checking passes
-- ✅ Ready for smoke test implementation in next step
+- ✅ All dependencies pinned to specified versions
+
+---
+
+## Phase 2: Feature Testing & Validation (Smoke Tests Validate Implementations)
+
+**NOTE:** FEATURE-002, FEATURE-003, FEATURE-004 implementations are complete but lack automated test coverage. Smoke tests below validate correctness across critical flows.
+
+### [ ] Step: DEV-GAP-001 – shadcn/ui setup & macOS theme integration
+
+Install shadcn/ui CLI, initialize component library, and configure Tailwind with macOS-specific theme (SF Pro fonts, system colors, dark mode support).
+
+**Deliverables:**
+- `src/components/ui/` directory with shadcn component stubs (Button, Card, Dialog, etc.)
+- `tailwind.config.ts` updated with macOS theme (system fonts, spacing, colors)
+- Dark mode detection (prefers-color-scheme) in App.tsx
+- Documentation: `docs/ui-patterns.md` for component usage conventions
 
 ### [ ] Step: FEATURE-005 – Servers & Marketplace smoke tests
 
-Implement smoke tests for the Servers and Marketplace pages that cover server install/sync and Marketplace install flows (post FEATURE-001 wiring).
+Implement smoke tests for the Servers and Marketplace pages that cover:
+- Server install/uninstall (validates FEATURE-002 notifications)
+- Marketplace browsing and detail modal (validates FEATURE-004 copy/branding)
+- Server sync workflow (validates FEATURE-002 success/error toasts)
 
 ### [ ] Step: FEATURE-005 – Clients, Settings, and FirstRun smoke tests
 
-Implement smoke tests for Clients sync, credential create/delete in Settings, and first-run import behavior, ensuring they rely on mocked backends only.
+Implement smoke tests for:
+- Clients sync operations (validates FEATURE-002 sync toasts, FEATURE-003 auto-sync toggle UI)
+- Credential create/delete in Settings (validates FEATURE-002 credential toasts)
+- First-run import behavior (validates FEATURE-004 config path references)
+- Dashboard quick-action flows
 
 ### [ ] Step: Validation Gate after FEATURE-005
 
-Run `npm run lint`, `npm run typecheck`, and `npm test` to confirm the new frontend test harness and smoke tests are stable before starting FEATURE-006.
+Run `npm run lint`, `npm run typecheck`, and `npm test -- --run` to confirm the new frontend test harness and smoke tests pass, validating FEATURE-002/003/004 implementations.
+
+**Success Criteria:**
+- ✅ All smoke tests pass (Servers, Marketplace, Clients, Settings, FirstRun)
+- ✅ Test coverage for notification emissions across all critical flows
+- ✅ Branding string validation in rendered output
+- ✅ Auto-sync toggle UI state verified
+
+---
+
+## Phase 3: Post-MVP Features & Infrastructure
 
 ### [ ] Step: FEATURE-006 – useServerDetails hook implementation
 
@@ -147,13 +180,45 @@ Enhance `ServerDetailModal` to consume `useServerDetails`, prefer richer metadat
 
 ### [ ] Step: FEATURE-006 – Details hook tests & UX verification
 
-Add tests for `useServerDetails` query behavior and a UI-level assertion for the detail modal, then manually inspect a few Marketplace entries to validate UX and error resilience.
+Add tests for `useServerDetails` query behavior and a UI-level assertion for the detail modal, validating error resilience.
 
 ### [ ] Step: Validation Gate after FEATURE-006
 
-Run `npm run lint`, `npm run typecheck`, and UI-focused tests touching Marketplace to ensure detail hook changes are stable before any P2 work on FEATURE-001.
+Run `npm run lint`, `npm run typecheck`, and `npm test -- --run` on Marketplace-focused tests to ensure detail hook is stable.
 
 ---
+
+### [ ] Step: DEV-GAP-002 – Error boundary testing & resilience validation
+
+Add React Error Boundary tests covering render errors, network failures, and permission denials across critical pages (Servers, Clients, Marketplace, Settings).
+
+### [ ] Step: DEV-GAP-003 – Pre-commit hooks & CI/CD validation script
+
+Configure Husky + lint-staged for pre-commit validation (lint, typecheck, test) and create `.github/workflows/validate.yml` for GitHub Actions CI.
+
+### [ ] Step: DEV-GAP-004 – Component library documentation
+
+Create `docs/component-library.md` documenting shadcn/ui component usage, macOS theme customization, and patterns for dark mode consistency.
+
+### [ ] Step: DEV-GAP-005 – Accessibility baseline (aria-labels, roles, focus management)
+
+Audit and enhance existing components with accessibility attributes (aria-label, role, aria-describedby, tabIndex). Current codebase has minimal a11y coverage (2 aria attributes total). Priority: critical navigation, modals, form inputs.
+
+### [ ] Step: DEV-GAP-006 – System dark mode detection & persistence
+
+Implement `prefers-color-scheme` media query detection in App.tsx, persist user preference to localStorage, and ensure all shadcn/ui components respect system dark mode on app load.
+
+### [ ] Step: DEV-GAP-007 – Environment variable configuration (development)
+
+Create `.env.example` documenting development environment vars (e.g., VITE_DEBUG_TAURI, VITE_API_TIMEOUT) and add env parsing utilities. Ensure no hardcoded secrets in code or bundled assets.
+
+### [ ] Step: DEV-GAP-008 – Structured logging & instrumentation
+
+Add a lightweight logging utility (`src/lib/logger.ts`) replacing console.log/error calls with structured logging. Support log levels (debug, info, warn, error) and avoid logging sensitive data (credentials, tokens, API keys).
+
+---
+
+## Phase 4: Post-MVP Enhancement
 
 ### [ ] Step: FEATURE-001 (P2) – Install mapping helper & type alignment
 
@@ -169,12 +234,16 @@ Wire `ServerDetailModal` and the `Marketplace` page to the new hook, thread thro
 
 ### [ ] Step: FEATURE-001 (P2) – Marketplace install tests & manual verification
 
-Add TS tests for the mapping helper plus at least one Marketplace install smoke test, then manually verify end-to-end installs for npm/uvx/docker/remote sources.
+Add TS tests for the mapping helper plus end-to-end Marketplace install tests.
 
 ### [ ] Step: Cross-cutting notification behavior tests
 
-After all major features are wired, add focused tests around the notification helpers and at least one UI-level assertion per critical flow (servers, clients, marketplace, credentials, auto-sync) to validate that expected notifications are emitted end-to-end.
+Add focused integration tests validating notification emissions across all flows (servers, clients, marketplace, credentials, auto-sync).
+
+---
+
+## Phase 5: Final Verification
 
 ### [ ] Step: Final Verification & Report
 
-Run backend/frontend tests, perform targeted manual verification against acceptance criteria, and write `{@artifacts_path}/report.md` summarizing implementation and validation.
+Run full backend/frontend test suite, validate against acceptance criteria, and write `{@artifacts_path}/report.md` summarizing implementation, test coverage, and deferred items.
