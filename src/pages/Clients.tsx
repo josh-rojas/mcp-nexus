@@ -9,6 +9,13 @@ import {
   useManualConfig,
 } from "../hooks/useClients";
 import type { ClientId, DetectedClient, SyncResult } from "../types";
+import {
+  notifyClientSyncError,
+  notifyClientSyncSuccess,
+  notifyManualConfigCopied,
+  notifySyncAllError,
+  notifySyncAllSuccess,
+} from "../lib/notifications";
 
 export function Clients() {
   const { clients, isLoading, error, refetch } = useClients();
@@ -38,6 +45,9 @@ export function Clients() {
       setSyncResult(null);
       try {
         const result = await syncClient.mutateAsync(clientId);
+         const clientName =
+          clients?.find((c) => c.id === clientId)?.name ?? clientId;
+
         // Convert single result to SyncResult format for display
         setSyncResult({
           totalClients: 1,
@@ -46,11 +56,23 @@ export function Clients() {
           manualRequired: result.manualConfig ? 1 : 0,
           results: [result],
         });
+        if (result.success) {
+          notifyClientSyncSuccess(clientName);
+        } else {
+          notifyClientSyncError(
+            clientName,
+            result.error || "Client sync reported a failure."
+          );
+        }
+      } catch (err) {
+        const clientName =
+          clients?.find((c) => c.id === clientId)?.name ?? clientId;
+        notifyClientSyncError(clientName, err);
       } finally {
         setSyncingClientId(null);
       }
     },
-    [syncClient]
+    [clients, syncClient]
   );
 
   const handleSyncAll = useCallback(async () => {
@@ -59,6 +81,17 @@ export function Clients() {
     try {
       const result = await syncAllClients.mutateAsync();
       setSyncResult(result);
+      if (result.failed === 0) {
+        notifySyncAllSuccess();
+      } else {
+        notifySyncAllError(
+          new Error(
+            `Sync completed with ${result.failed} client failure(s).`
+          )
+        );
+      }
+    } catch (err) {
+      notifySyncAllError(err);
     } finally {
       setIsSyncingAll(false);
     }

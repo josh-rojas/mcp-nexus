@@ -1,7 +1,12 @@
 import { useState, useMemo } from "react";
 import { useCredentials } from "../../hooks/useCredentials";
 import { useServerList } from "../../hooks/useServers";
-import { showSuccess, showError } from "../../stores/notificationStore";
+import {
+  notifyCredentialDeleteError,
+  notifyCredentialDeleteSuccess,
+  notifyCredentialSaveError,
+  notifyCredentialSaveSuccess,
+} from "../../lib/notifications";
 import type { McpServer } from "../../types";
 
 /** Extract keychain reference names from a value */
@@ -107,13 +112,11 @@ export function CredentialManager() {
 
     try {
       await saveCredential({ name: keyName, value: secretValue });
-      showSuccess(
-        editingName ? "Credential Updated" : "Credential Saved",
-        `"${keyName}" has been securely stored in your system keychain.`
-      );
+      notifyCredentialSaveSuccess(keyName, !!editingName);
       handleClose();
     } catch (err) {
       setActionError(err instanceof Error ? err.message : "Failed to save credential");
+      notifyCredentialSaveError(err);
     }
   };
 
@@ -121,9 +124,9 @@ export function CredentialManager() {
     if (confirm(`Are you sure you want to delete credential "${name}"?`)) {
       try {
         await deleteCredential(name);
-        showSuccess("Credential Deleted", `"${name}" has been removed from your keychain.`);
+        notifyCredentialDeleteSuccess(name);
       } catch (err) {
-        showError("Delete Failed", err instanceof Error ? err.message : "Failed to delete credential");
+        notifyCredentialDeleteError(err);
       }
     }
   };

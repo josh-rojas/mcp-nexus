@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { DetectedClient } from "../../types";
+import { notifyManualConfigCopied } from "../../lib/notifications";
 
 interface ManualConfigModalProps {
   client: DetectedClient | null;
@@ -32,6 +33,7 @@ export function ManualConfigModal({
       try {
         await navigator.clipboard.writeText(configJson);
         setCopied(true);
+        notifyManualConfigCopied(client.name);
       } catch {
         // Fallback for older browsers
         const textArea = document.createElement("textarea");
@@ -41,6 +43,7 @@ export function ManualConfigModal({
         document.execCommand("copy");
         document.body.removeChild(textArea);
         setCopied(true);
+        notifyManualConfigCopied(client.name);
       }
     }
   };

@@ -3,6 +3,14 @@ import { Header } from "../components/layout/Header";
 import { ServerList } from "../components/servers/ServerList";
 import { AddServerModal } from "../components/servers/AddServerModal";
 import { useServers } from "../hooks/useServers";
+import {
+  notifyServerInstallSuccess,
+  notifyServerInstallError,
+  notifyServerUninstallSuccess,
+  notifyServerUninstallError,
+  notifySyncAllSuccess,
+  notifySyncAllError,
+} from "../lib/notifications";
 import type { McpServer, ClientId, InstallSource } from "../types";
 
 /** Loading state component */
@@ -156,9 +164,23 @@ export function Servers() {
 
   const handleRemove = useCallback(
     (serverId: string) => {
-      uninstall({ serverId, cleanupResources: true, syncAfterUninstall: true });
+      const server = servers.find((s) => s.id === serverId);
+      const serverName = server?.name ?? "server";
+
+      uninstall(
+        { serverId, cleanupResources: true, syncAfterUninstall: true },
+        {
+          onSuccess: () => {
+            notifyServerUninstallSuccess(serverName);
+          },
+          onError: (err) => {
+            console.error("Uninstall failed:", err);
+            notifyServerUninstallError(serverName, err);
+          },
+        }
+      );
     },
-    [uninstall]
+    [servers, uninstall]
   );
 
   const handleViewDetails = useCallback((server: McpServer) => {
@@ -189,10 +211,11 @@ export function Servers() {
         {
           onSuccess: () => {
             setIsAddModalOpen(false);
+            notifyServerInstallSuccess(name);
           },
           onError: (err) => {
             console.error("Installation failed:", err);
-            // TODO: Show error toast
+            notifyServerInstallError(name, err);
           },
         }
       );
@@ -204,11 +227,11 @@ export function Servers() {
     sync(undefined, {
       onSuccess: (result) => {
         console.log("Sync completed:", result);
-        // TODO: Show success toast
+        notifySyncAllSuccess();
       },
       onError: (err) => {
         console.error("Sync failed:", err);
-        // TODO: Show error toast
+        notifySyncAllError(err);
       },
     });
   }, [sync]);

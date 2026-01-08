@@ -9,6 +9,10 @@ import {
   ServerDetailModal,
 } from "../components/marketplace";
 import { useMarketplace } from "../hooks/useMarketplace";
+import {
+  notifyServerInstallSuccess,
+  notifyServerInstallError,
+} from "../lib/notifications";
 import type { SortOption, MarketplaceServer, ClientId } from "../types";
 
 export function Marketplace() {
@@ -71,11 +75,13 @@ export function Marketplace() {
         // Simulate installation delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
+        notifyServerInstallSuccess(server.name);
+
         // Close modal after successful installation
         setSelectedServer(null);
       } catch (error) {
         console.error("Installation failed:", error);
-        // TODO: Show error toast
+        notifyServerInstallError(server.name, error);
       } finally {
         setIsInstalling(false);
       }
