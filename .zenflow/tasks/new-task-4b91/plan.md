@@ -18,7 +18,8 @@ Do not make assumptions on important decisions — get clarification first.
 
 ## Workflow Steps
 
-### [ ] Step: Technical Specification
+### [x] Step: Technical Specification
+<!-- chat-id: 152ba68a-a19a-4e54-a945-75a8b99e5994 -->
 
 Assess the task's difficulty, as underestimating it leads to poor outcomes.
 - easy: Straightforward implementation, trivial bug fix or feature
@@ -50,15 +51,30 @@ Save to `{@artifacts_path}/plan.md`. If the feature is trivial and doesn't warra
 
 ---
 
-### [ ] Step: Implementation
+### [ ] Step: Implement FEATURE-001 Marketplace Install Flow
 
-Implement the task according to the technical specification and general engineering best practices.
+Implement `installMapping` helper, `useInstallFromMarketplace` hook, and wire Marketplace UI to invoke the existing `install_mcp_server` command end-to-end (central config + client sync).
 
-1. Break the task into steps where possible.
-2. Implement the required changes in the codebase.
-3. Add and run relevant tests and linters.
-4. Perform basic manual verification if applicable.
-5. After completion, write a report to `{@artifacts_path}/report.md` describing:
-   - What was implemented
-   - How the solution was tested
-   - The biggest issues or challenges encountered
+### [ ] Step: Implement FEATURE-002 Toast Notifications
+
+Add `notifications` helper module and integrate success/error toasts for server install/uninstall, sync operations, Marketplace install, and credential operations.
+
+### [ ] Step: Implement FEATURE-003 Auto-Sync Preference
+
+Extend config models for `autoSyncOnChanges`, bind the Settings toggle to persisted state, and add debounced auto-sync triggering on server changes.
+
+### [ ] Step: Implement FEATURE-004 Naming & Config Path Consistency
+
+Update UI strings and documentation to consistently use “MCP Nexus” and `~/.mcp-nexus/config.json`, leaving keychain internals unchanged for compatibility.
+
+### [ ] Step: Implement FEATURE-005 Frontend Smoke Tests
+
+Configure Vitest + React Testing Library and add smoke tests for Servers, Marketplace, Clients, Settings/Credentials, and FirstRun flows.
+
+### [ ] Step: Implement FEATURE-006 Marketplace Details Hook
+
+Implement `useServerDetails` using `get_server_details` and enhance `ServerDetailModal` to consume richer detail data with graceful fallback.
+
+### [ ] Step: Final Verification & Report
+
+Run backend/frontend tests, perform targeted manual verification against acceptance criteria, and write `{@artifacts_path}/report.md` summarizing implementation and validation.

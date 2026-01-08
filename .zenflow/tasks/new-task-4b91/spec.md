@@ -1,0 +1,206 @@
+Technical context
+-----------------
+- Stack: Tauri 2 (Rust backend) + React 19 / TypeScript / Tailwind / React Query + Zustand.
+- Backend owns central config at `~/.mcp-nexus/config.json` via `ConfigManager` and exposes commands through `src-tauri/src/commands`.
+- Frontend talks to Tauri via typed wrappers in `src/lib/tauri.ts` and domain hooks in `src/hooks`.
+- Installation pipeline already exists (`InstallServerRequest` / `InstallSource` in Rust/TS, `install_mcp_server` command); Marketplace, sync engine, keychain, and updates are implemented but some UI flows are stubbed.
+
+Overall implementation approach
+------------------------------
+- Treat the gap-analysis features as a cohesive “config + marketplace + UX reliability” increment, implemented across both layers but respecting existing patterns:
+  - Reuse `install_mcp_server` and `InstallServerRequest` for Marketplace install; keep Marketplace as a thin orchestrator over the existing installation pipeline.
+  - Persist auto-sync as a user preference in central config (single source of truth), but implement auto-sync triggering in the frontend to avoid complicating backend concurrency and to keep behavior testable.
+  - Centralize user notifications via small helpers wrapping `showSuccess` / `showError` for consistent copy and to avoid sprinkling string literals across pages.
+  - Introduce a lightweight Vitest + RTL harness for smoke-level integration tests that mock Tauri `invoke` and hooks, not the Rust backend.
+
+Feature 001 – Marketplace install flow
+--------------------------------------
+- New mapping helper: `src/lib/installMapping.ts`
+  - Export `buildInstallRequestFromMarketplace(input)` that takes:
+    - `server: MarketplaceServer`
+    - `enabledClients: ClientId[]`
+    - `transportMode: "stdio" | "sse"`
+    - Optional `sseUrl?: string`
+  - Map `MarketplaceServer` → `InstallServerRequest`:
+    - If `transportMode === "sse"`: require `sseUrl`, map to `InstallSource` variant `{ type: "remote", url, headers: {} }`.
+    - If `transportMode === "stdio"`:
+      - `package_registry === "npm"` → `{ type: "npm", package: package_name, args: [] }`.
+      - `package_registry === "pypi"` → `{ type: "uvx", package: package_name, args: [] }`.
+      - `package_registry === "docker"` → `{ type: "docker", image: package_name, dockerArgs: [] }`.
+      - For unsupported/missing registry, throw a typed error consumed by the UI.
+    - Set `name`, optional `description` from `short_description || ai_description`, `enabledClients`, `sourceUrl` from `source_code_url || external_url`, `env` initially empty.
+- Hook changes in `src/hooks/useMarketplace.ts`:
+  - Add `useInstallFromMarketplace` returning a React Query `useMutation` that:
+    - Accepts `{ server, enabledClients, transportMode, sseUrl?, syncAfterInstall? }`.
+    - Uses `buildInstallRequestFromMarketplace` and `installMcpServer(request, syncAfterInstall)` from `src/lib/tauri.ts`.
+    - On success: invalidate `["servers"]`, `["clients", "statuses"]`, and `["updates"]` to pull in newly installed servers and update badges; optionally invalidate relevant `["marketplace", "search"]` queries for counts.
+- UI wiring in `src/pages/Marketplace.tsx` and `src/components/marketplace/ServerDetailModal.tsx`:
+  - Extend `onInstall` contract to pass the selected transport mode explicitly (currently inferred via optional `sseUrl`); for compatibility, we can keep `sseUrl` optional and add a new `mode` parameter.
+  - Replace stubbed console/log + timeout with a call into `useInstallFromMarketplace().mutateAsync` and wire `isInstalling` from mutation state.
+  - On success: close modal, surface toast (Feature 002), and rely on Servers page reacting to invalidated queries.
+  - On error: show a toast with failure message and keep modal open for correction.
+
+Feature 002 – Toast notifications for critical operations
+---------------------------------------------------------
+- New helper module: `src/lib/notifications.ts`
+  - Provide small, semantic wrappers over `showSuccess` / `showError` / `showWarning`:
+    - `notifyServerInstalled(name, clients)` / `notifyServerInstallFailed(name, error)`.
+    - `notifyServerUninstalled(name)` / `notifyServerUninstallFailed(name, error)`.
+    - `notifySyncAllCompleted(result)` / `notifySyncFailed(scope, error)`.
+    - `notifyMarketplaceInstall(...)` thinly wrapping `notifyServerInstalled`.
+    - Leave credential-specific wording as-is but re-route through helpers for consistency.
+  - Ensure helpers never include secrets (only server names, client IDs, high-level error messages).
+- Integrate notifications into flows:
+  - `src/pages/Servers.tsx`:
+    - In `handleInstall` `onSuccess`, call `notifyServerInstalled` and in `onError` call `notifyServerInstallFailed`.
+    - In `handleSyncAll` `onSuccess`, call `notifySyncAllCompleted`; in `onError`, `notifySyncFailed("all-clients", error)`.
+    - In uninstall/remove logic (where `useUninstallServer` is used, likely via `ServerList`), ensure `onSuccess` / `onError` handlers use uninstall notifications.
+  - `src/pages/Marketplace.tsx`: use Marketplace-specific success/error helpers after calling the new mutation.
+  - `src/pages/Clients.tsx`: after `handleSync` and `handleSyncAll` complete, surface a success/failure toast in addition to the existing `SyncStatus` card; keep detailed per-client messaging in `SyncStatus`.
+  - `src/components/settings/CredentialManager.tsx`: refactor current inlined `showSuccess` / `showError` usage to call `notifyCredentialSaved` / `notifyCredentialDeleted` / `notifyCredentialDeleteFailed`, while preserving existing behavior.
+
+Feature 003 – Auto-sync preference and behavior
+-----------------------------------------------
+- Data model change (Rust):
+  - Extend `src-tauri/src/models/config.rs::UserPreferences`:
+    - Add `pub auto_sync_on_changes: bool` with `#[serde(default)]` and default `false` in `Default` impl to avoid surprising existing users.
+  - No changes to `ConfigManager` API; it already reads/writes the entire `McpHubConfig` object.
+- Data model change (TypeScript):
+  - Update `src/types/index.ts::UserPreferences` to include `autoSyncOnChanges: boolean;` with default injected on the frontend when absent (defensive fallback for older configs).
+- Preferences access layer:
+  - New hooks in `src/hooks/useConfig.ts`:
+    - `useConfig()` – `useQuery` over `["config"]` using `getConfig` from `src/lib/tauri.ts`.
+    - `useUpdatePreferences()` – `useMutation` that takes partial preferences, merges with current config, and persists via `saveConfig`; also updates the `["config"]` cache.
+  - This keeps config access centralized and decouples Settings/Servers from raw Tauri calls.
+- Settings UI binding:
+  - In `src/pages/Settings.tsx`, replace the placeholder checkbox with:
+    - A `useConfig()` read of `preferences.autoSyncOnChanges` (default `false` if undefined).
+    - `onChange` handler that calls `useUpdatePreferences().mutate({ autoSyncOnChanges: next })`.
+  - Add basic loading/disabled handling while config is being fetched/saved.
+- Auto-sync triggering (frontend-driven, debounced):
+  - ADR (inline):
+    - Context: server changes happen primarily through the Servers page and hooks; backend already exposes explicit sync commands and has robust sync engine tests.
+    - Decision: implement auto-sync triggering in the frontend by calling existing sync commands when a preference flag is enabled, rather than having the backend auto-sync on every config write.
+    - Consequences:
+      - Easier to debounce and to test in isolation; no additional cross-cutting concerns in `ConfigManager`.
+      - Behavior is explicit and limited to the Tauri GUI; future CLI or other frontends can choose their own behavior.
+      - Auto-sync will not fire if config is mutated outside the GUI, which is acceptable for MVP.
+    - Alternatives considered: backend-driven sync on every write (risking thrashing and tight coupling) and file-watcher-based auto-sync (already on roadmap, out of scope now).
+  - Implementation:
+    - Use `useConfig()` (or a smaller `usePreferences()` wrapper) inside `src/pages/Servers.tsx` to read `autoSyncOnChanges`.
+    - Add a debounced `scheduleAutoSync()` helper in the Servers page:
+      - Backed by `useRef<NodeJS.Timeout | null>`; each call clears the previous timer and sets a new one (e.g., 1–2 seconds delay).
+      - When the timer fires, call the existing `sync` mutation from `useServers` (same as “Sync All” button) and surface notifications via `notifySyncAllCompleted` / `notifySyncFailed`.
+    - In handlers that materially change server config:
+      - `handleInstall` `onSuccess`.
+      - `handleRemove` / uninstall flows.
+      - `handleToggleClient` `onSuccess` (switch from bare `toggleClient({...})` to `toggleClient({...}, { onSuccess: ... })`).
+    - Optionally, auto-sync after imports in `useImportClientServers` (Clients/FirstRun) using the same pattern.
+  - Auto-sync error visibility:
+    - Errors from the sync mutation go through the toast helpers.
+    - Sync results still invalidate `["clients", "statuses"]`, keeping Clients page indicators accurate.
+
+Feature 004 – Config location & branding consistency
+----------------------------------------------------
+- UI/string changes:
+  - `src/pages/Settings.tsx`:
+    - Header subtitle: change from `"Configure MCP Manager"` to `"Configure MCP Nexus"`.
+    - Config path text: change from `~/.mcp-manager/config.json` to `~/.mcp-nexus/config.json`.
+    - Optional: instead of hardcoding the path, read `configPath` from `initializeConfig()` or `useConfig()` and display that to avoid drift if the path changes again.
+  - `src/components/layout/Sidebar.tsx`:
+    - App title: update `"MCP Manager"` → `"MCP Nexus"`.
+  - `src/components/dashboard/FirstRunWelcome.tsx`:
+    - Headline: `"Welcome to MCP Manager"` → `"Welcome to MCP Nexus"`.
+  - `index.html` `<title>`: change `"MCP Manager"` → `"MCP Nexus"`.
+- Docs:
+  - README already uses MCP Nexus and `~/.mcp-nexus`; only verify and adjust if any residual mentions are discovered.
+  - Leave internal comments and keychain service identifiers in `src-tauri/src/services/keychain.rs` unchanged (`com.mcp-manager.credentials`, `.mcp-manager` directory) to avoid breaking previously stored credentials; this is a deliberate backwards-compatibility exception.
+- Verification: `rg "MCP Manager"`, `rg ".mcp-manager"` used as guardrails; only UI/docs references touching central config and user-visible branding are updated.
+
+Feature 005 – Frontend smoke test suite
+---------------------------------------
+- Test runner and configuration:
+  - Add devDependencies in `package.json`: `vitest`, `@vitest/ui` (optional), `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`, `jsdom`.
+  - Add `npm test` script running `vitest --runInBand` (or `vitest` with sensible defaults).
+  - Create `vitest.config.ts` using `defineConfig` from `vitest/config` and reusing `vite.config.ts` where practical; configure:
+    - `test.environment = "jsdom"`.
+    - `test.setupFiles = "src/test/setup.ts"`.
+    - `test.globals = true`, `test.css = true`.
+  - `src/test/setup.ts`:
+    - Import `@testing-library/jest-dom`.
+    - Mock Tauri APIs (`@tauri-apps/api/core` `invoke`) to a `vi.fn` returning resolved promises or controlled test doubles.
+- Smoke tests (high-level plan; minimal but meaningful coverage):
+  - Servers:
+    - `src/pages/Servers.test.tsx`: render Servers with mocked `useServers` hook to simulate basic server list and a successful install/sync; assert that buttons render and that clicking “Sync All” triggers the mock sync mutation.
+  - Marketplace:
+    - `src/pages/Marketplace.test.tsx`: mock `useMarketplace` and `useInstallFromMarketplace`; verify that selecting a card opens `ServerDetailModal` and that clicking “Install” calls the install mutation with expected payload shape (name, client IDs, etc.).
+  - Clients:
+    - `src/pages/Clients.test.tsx`: mock `useClients`, `useSyncClient`, `useSyncAllClients` to simulate success/failure; assert `SyncStatus` summary renders and toasts fire via notification helpers.
+  - Settings/Credentials:
+    - `src/components/settings/CredentialManager.test.tsx`: simulate saving and deleting a credential with mocked `useCredentials` and verify that corresponding notification helpers are invoked.
+  - First-run:
+    - `src/components/dashboard/FirstRunWelcome.test.tsx`: render with mocked `useDetectedClients` and `useImportClientServers` and assert that clicking import triggers the mutation.
+
+Feature 006 – Marketplace server detail hook
+--------------------------------------------
+- Hook implementation in `src/hooks/useMarketplace.ts`:
+  - Replace the stubbed `useServerDetails` with a real React Query hook:
+    - Signature: `useServerDetails(name: string | null)`.
+    - Query key: `["marketplace", "details", name]`.
+    - `queryFn`: `() => getServerDetails(name!)` from `src/lib/tauri.ts`.
+    - `enabled: !!name`.
+    - `staleTime`: reuse Marketplace cache TTL (5 min).
+  - Return shape: `{ data, isLoading, error }` to align with other hooks.
+- UI integration:
+  - `src/components/marketplace/ServerDetailModal.tsx`:
+    - Option A (minimal): keep passing the list `MarketplaceServer` as `server` (baseline data), but inside the modal call `useServerDetails(server.name)` and prefer `details` when available:
+      - Merge extra fields if backend later enriches the type (e.g., docs, tags); for now, a simple override is enough.
+      - Show a small inline loading indicator while details are being fetched; fall back to list data on error while logging or showing a non-blocking message in the modal.
+    - Ensure errors from `useServerDetails` do not affect the rest of the Marketplace page; constrain their visual impact to the modal.
+
+Source files to create/modify (summary)
+---------------------------------------
+- New:
+  - `src/lib/installMapping.ts`
+  - `src/lib/notifications.ts`
+  - `src/hooks/useConfig.ts`
+  - `src/test/setup.ts`
+  - `vitest.config.ts`
+- Modified (frontend):
+  - `src/hooks/useMarketplace.ts`
+  - `src/hooks/useServers.ts` (possibly for shared install helper usage).
+  - `src/hooks/useClients.ts` (optional auto-sync-after-import wiring).
+  - `src/pages/Marketplace.tsx`
+  - `src/components/marketplace/ServerDetailModal.tsx`
+  - `src/pages/Servers.tsx`
+  - `src/pages/Clients.tsx`
+  - `src/components/settings/CredentialManager.tsx`
+  - `src/pages/Settings.tsx`
+  - `src/components/layout/Sidebar.tsx`
+  - `src/components/dashboard/FirstRunWelcome.tsx`
+  - `index.html`
+  - `src/types/index.ts`
+  - `package.json`
+- Modified (backend):
+  - `src-tauri/src/models/config.rs` (add auto-sync preference).
+- Tests:
+  - New `*.test.tsx` files as described above for Servers, Marketplace, Clients, Settings/Credentials, and FirstRun.
+
+Verification approach
+---------------------
+- Automated:
+  - Backend: run `cd src-tauri && cargo test` to ensure config/installation changes are safe.
+  - Frontend:
+    - `npm run lint` and `npm run typecheck` to validate type safety and linting.
+    - `npm test` (Vitest) to run the new smoke tests.
+- Manual:
+  - Marketplace:
+    - Install representative servers from npm, PyPI/uvx, Docker, and a remote SSE entry; confirm they appear in Servers and sync to at least one client.
+  - Auto-sync:
+    - With auto-sync enabled, install/uninstall/toggle servers and verify that client configs update without pressing “Sync All” (and that toasts and Clients indicators reflect success/failure).
+    - With auto-sync disabled, verify that no background sync occurs and manual “Sync All” still works.
+  - Notifications:
+    - Exercise server install/uninstall, sync, credentials save/delete to confirm consistent toast messaging.
+  - Branding:
+    - Confirm Settings, Sidebar, FirstRun, window title, and README show “MCP Nexus” and `~/.mcp-nexus/config.json`.
+
