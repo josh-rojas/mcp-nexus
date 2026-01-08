@@ -49,14 +49,6 @@ Rule of thumb for step size: each step should represent a coherent unit of work 
 
 Save to `{@artifacts_path}/plan.md`. If the feature is trivial and doesn't warrant this breakdown, keep the Implementation step below as is.
 
----
-
-### [ ] Step: Per-Feature Validation Gate
-
-Before marking a feature group complete and starting work on the next feature, run code/error checks (`npm run lint`, `npm run typecheck`, and `cd src-tauri && cargo test` where relevant) and fix regressions so the repo remains in a green state between features.
-
----
-
 ### [ ] Step: FEATURE-002 – Notification helper module
 
 Introduce a `notifications` helper module that wraps `showSuccess`/`showError`/`showWarning`/`showInfo` with semantic functions for installs, uninstalls, syncs, and credential operations, avoiding exposure of secrets.
