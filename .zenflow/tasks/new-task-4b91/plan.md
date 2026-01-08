@@ -51,22 +51,6 @@ Save to `{@artifacts_path}/plan.md`. If the feature is trivial and doesn't warra
 
 ---
 
-### [ ] Step: FEATURE-001 – Install mapping helper & type alignment
-
-Design and implement a TS mapping helper that converts `MarketplaceServer` plus client/transport selections into a valid `InstallServerRequest`, ensuring TS types remain aligned with Rust models.
-
-### [ ] Step: FEATURE-001 – useInstallFromMarketplace hook
-
-Add a dedicated `useInstallFromMarketplace` mutation in `useMarketplace` that consumes the mapping helper, calls `install_mcp_server`, and invalidates `servers`, `clients/statuses`, and `updates` queries on success.
-
-### [ ] Step: FEATURE-001 – Marketplace UI wiring & UX
-
-Wire `ServerDetailModal` and the `Marketplace` page to the new hook, thread through transport mode and SSE URL, surface loading/error states, and close the modal only on successful installation.
-
-### [ ] Step: FEATURE-001 – Marketplace install tests & manual verification
-
-Add TS tests for the mapping helper plus at least one Marketplace install smoke test, then manually verify end-to-end installs for npm/uvx/docker/remote sources.
-
 ### [ ] Step: FEATURE-002 – Notification helper module
 
 Introduce a `notifications` helper module that wraps `showSuccess`/`showError`/`showWarning`/`showInfo` with semantic functions for installs, uninstalls, syncs, and credential operations, avoiding exposure of secrets.
@@ -134,6 +118,24 @@ Enhance `ServerDetailModal` to consume `useServerDetails`, prefer richer metadat
 ### [ ] Step: FEATURE-006 – Details hook tests & UX verification
 
 Add tests for `useServerDetails` query behavior and a UI-level assertion for the detail modal, then manually inspect a few Marketplace entries to validate UX and error resilience.
+
+---
+
+### [ ] Step: FEATURE-001 (P2) – Install mapping helper & type alignment
+
+Design and implement a TS mapping helper that converts `MarketplaceServer` plus client/transport selections into a valid `InstallServerRequest`, ensuring TS types remain aligned with Rust models.
+
+### [ ] Step: FEATURE-001 (P2) – useInstallFromMarketplace hook
+
+Add a dedicated `useInstallFromMarketplace` mutation in `useMarketplace` that consumes the mapping helper, calls `install_mcp_server`, and invalidates `servers`, `clients/statuses`, and `updates` queries on success.
+
+### [ ] Step: FEATURE-001 (P2) – Marketplace UI wiring & UX
+
+Wire `ServerDetailModal` and the `Marketplace` page to the new hook, thread through transport mode and SSE URL, surface loading/error states, and close the modal only on successful installation.
+
+### [ ] Step: FEATURE-001 (P2) – Marketplace install tests & manual verification
+
+Add TS tests for the mapping helper plus at least one Marketplace install smoke test, then manually verify end-to-end installs for npm/uvx/docker/remote sources.
 
 ### [ ] Step: Final Verification & Report
 
