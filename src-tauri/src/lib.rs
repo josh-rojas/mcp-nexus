@@ -8,11 +8,11 @@ use commands::{
     check_server_update, clear_marketplace_cache, delete_credential, detect_clients,
     get_all_client_statuses, get_client_config, get_client_status, get_config,
     get_credential_value, get_manual_config, get_server, get_server_details, get_server_status,
-    get_servers, get_update_count, import_client_servers, initialize_config, install_mcp_server,
-    list_credentials, remove_server, run_doctor, save_config, save_credential, search_servers,
-    set_client_sync_enabled, sync_all_clients, sync_client, toggle_server_client,
-    uninstall_mcp_server, update_server, validate_credential_references, validate_install,
-    AppState, MarketplaceState,
+    get_servers, get_system_accent_color, get_update_count, import_client_servers,
+    initialize_config, install_mcp_server, list_credentials, remove_server, run_doctor,
+    save_config, save_credential, search_servers, set_client_sync_enabled, sync_all_clients,
+    sync_client, toggle_server_client, uninstall_mcp_server, update_server,
+    validate_credential_references, validate_install, AppState, MarketplaceState,
 };
 use services::{ConfigManager, MarketplaceClient};
 use std::sync::{Arc, Mutex};
@@ -82,6 +82,8 @@ pub fn run() {
             check_health,
             check_all_health,
             get_server_status,
+            // System commands
+            get_system_accent_color,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

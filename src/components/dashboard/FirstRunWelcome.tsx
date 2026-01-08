@@ -69,7 +69,7 @@ export function FirstRunWelcome() {
             <div className="flex gap-3">
               <Link
                 to="/servers"
-                className="inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                className="inline-flex items-center px-4 py-2 bg-white text-system-accent rounded-lg hover:bg-system-accent/5 transition-colors font-medium"
               >
                 View Servers
               </Link>
@@ -141,7 +141,7 @@ export function FirstRunWelcome() {
               <button
                 onClick={handleImport}
                 disabled={importing || selectedClients.size === 0}
-                className="mt-4 inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-4 inline-flex items-center px-4 py-2 bg-white text-system-accent rounded-lg hover:bg-system-accent/5 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {importing ? (
                   <>
@@ -191,7 +191,7 @@ export function FirstRunWelcome() {
             <div className="flex gap-3">
               <Link
                 to="/marketplace"
-                className="inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                className="inline-flex items-center px-4 py-2 bg-white text-system-accent rounded-lg hover:bg-system-accent/5 transition-colors font-medium"
               >
                 <svg
                   className="h-4 w-4 mr-2"

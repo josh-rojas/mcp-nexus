@@ -81,9 +81,9 @@ export function RecentActivity() {
         );
       case "sync":
         return (
-          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+          <div className="p-2 bg-system-accent/10 dark:bg-system-accent/20 rounded-lg">
             <svg
-              className="h-4 w-4 text-blue-600 dark:text-blue-400"
+              className="h-4 w-4 text-system-accent dark:text-system-accent"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

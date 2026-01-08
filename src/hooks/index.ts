@@ -1,6 +1,7 @@
 export * from "./useDoctor";
 export * from "./useClients";
 export * from "./useMarketplace";
+export * from "./useServerDetails";
 export * from "./useServers";
 export * from "./useUpdates";
 export * from "./useHealth";

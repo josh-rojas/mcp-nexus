@@ -24,10 +24,10 @@ export function ServerSummary() {
       value={serverCount}
       subtitle={getSubtitle()}
       isLoading={isLoading}
-      iconBgColor="bg-blue-100 dark:bg-blue-900/30"
+      iconBgColor="bg-system-accent/10 dark:bg-system-accent/20"
       icon={
         <svg
-          className="h-6 w-6 text-blue-600 dark:text-blue-400"
+          className="h-6 w-6 text-system-accent dark:text-system-accent"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

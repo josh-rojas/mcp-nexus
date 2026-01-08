@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Theme, ThemeContext } from "../contexts/ThemeContext";
+import { getSystemAccentColor } from "../lib/tauri";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -17,6 +18,31 @@ export function ThemeProvider({
   );
   
   const [resolvedTheme, setResolvedTheme] = useState<"dark" | "light">("light");
+
+  // Helper to convert hex to space-separated RGB
+  const hexToRgb = (hex: string) => {
+    hex = hex.replace(/^#/, '');
+    const bigint = parseInt(hex, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `${r} ${g} ${b}`;
+  };
+
+  // Fetch system accent color on mount
+  useEffect(() => {
+    getSystemAccentColor()
+      .then((color) => {
+        document.documentElement.style.setProperty("--system-accent", color);
+        document.documentElement.style.setProperty("--system-accent-rgb", hexToRgb(color));
+      })
+      .catch((err) => {
+        console.error("Failed to get system accent color:", err);
+        const fallback = "#3b82f6";
+        document.documentElement.style.setProperty("--system-accent", fallback);
+        document.documentElement.style.setProperty("--system-accent-rgb", hexToRgb(fallback));
+      });
+  }, []);
 
   useEffect(() => {
     const root = window.document.documentElement;

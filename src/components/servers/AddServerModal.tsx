@@ -287,13 +287,13 @@ export function AddServerModal({
                   onClick={() => setSourceType(option.value)}
                   className={`p-3 text-left rounded-lg border transition-colors ${
                     sourceType === option.value
-                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
+                      ? "border-system-accent bg-system-accent/5 dark:bg-system-accent/20"
                       : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                   }`}
                 >
                   <div className={`text-sm font-medium ${
                     sourceType === option.value
-                      ? "text-blue-700 dark:text-blue-300"
+                      ? "text-system-accent dark:text-system-accent"
                       : "text-gray-900 dark:text-white"
                   }`}>
                     {option.label}
@@ -319,7 +319,7 @@ export function AddServerModal({
                     value={localPath}
                     onChange={(e) => setLocalPath(e.target.value)}
                     placeholder="/path/to/server.py or npx"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                     required
                   />
                 </div>
@@ -332,7 +332,7 @@ export function AddServerModal({
                     value={localCommand}
                     onChange={(e) => setLocalCommand(e.target.value)}
                     placeholder="python, node, etc."
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -344,7 +344,7 @@ export function AddServerModal({
                     value={localArgs}
                     onChange={(e) => setLocalArgs(e.target.value)}
                     placeholder="--port 8080 --debug"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                   />
                 </div>
               </>
@@ -360,7 +360,7 @@ export function AddServerModal({
                   value={remoteUrl}
                   onChange={(e) => setRemoteUrl(e.target.value)}
                   placeholder="https://api.example.com/mcp/sse"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                   required
                 />
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -380,7 +380,7 @@ export function AddServerModal({
                     value={npmPackage}
                     onChange={(e) => setNpmPackage(e.target.value)}
                     placeholder="@modelcontextprotocol/server-filesystem"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                     required
                   />
                 </div>
@@ -393,7 +393,7 @@ export function AddServerModal({
                     value={npmArgs}
                     onChange={(e) => setNpmArgs(e.target.value)}
                     placeholder="/path/to/allowed/directory"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                   />
                 </div>
               </>
@@ -410,7 +410,7 @@ export function AddServerModal({
                     value={uvxPackage}
                     onChange={(e) => setUvxPackage(e.target.value)}
                     placeholder="mcp-server-git"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                     required
                   />
                 </div>
@@ -423,7 +423,7 @@ export function AddServerModal({
                     value={uvxArgs}
                     onChange={(e) => setUvxArgs(e.target.value)}
                     placeholder="--repo /path/to/repo"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                   />
                 </div>
               </>
@@ -440,7 +440,7 @@ export function AddServerModal({
                     value={dockerImage}
                     onChange={(e) => setDockerImage(e.target.value)}
                     placeholder="mcp/server:latest"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                     required
                   />
                 </div>
@@ -453,7 +453,7 @@ export function AddServerModal({
                     value={dockerArgs}
                     onChange={(e) => setDockerArgs(e.target.value)}
                     placeholder="-v /host/path:/container/path"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                   />
                 </div>
               </>
@@ -470,7 +470,7 @@ export function AddServerModal({
                     value={githubRepo}
                     onChange={(e) => setGithubRepo(e.target.value)}
                     placeholder="owner/repository"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                     required
                   />
                 </div>
@@ -483,7 +483,7 @@ export function AddServerModal({
                     value={githubBranch}
                     onChange={(e) => setGithubBranch(e.target.value)}
                     placeholder="main"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                   />
                 </div>
               </>
@@ -499,7 +499,7 @@ export function AddServerModal({
               <button
                 type="button"
                 onClick={addEnvVar}
-                className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                className="text-sm text-system-accent dark:text-system-accent hover:underline"
               >
                 + Add Variable
               </button>
@@ -513,14 +513,14 @@ export function AddServerModal({
                       value={envVar.key}
                       onChange={(e) => updateEnvVar(index, "key", e.target.value)}
                       placeholder="KEY"
-                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                     />
                     <input
                       type="password"
                       value={envVar.value}
                       onChange={(e) => updateEnvVar(index, "value", e.target.value)}
                       placeholder="value"
-                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
                     />
                     <button
                       type="button"
@@ -551,7 +551,7 @@ export function AddServerModal({
                 <button
                   type="button"
                   onClick={selectAllClients}
-                  className="text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-system-accent dark:text-system-accent hover:underline"
                 >
                   Select All
                 </button>
@@ -559,7 +559,7 @@ export function AddServerModal({
                 <button
                   type="button"
                   onClick={deselectAllClients}
-                  className="text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-system-accent dark:text-system-accent hover:underline"
                 >
                   Deselect All
                 </button>
@@ -571,7 +571,7 @@ export function AddServerModal({
                   key={client.id}
                   className={`flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-colors ${
                     selectedClients.includes(client.id)
-                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
+                      ? "border-system-accent bg-system-accent/5 dark:bg-system-accent/20"
                       : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                   }`}
                 >
@@ -579,7 +579,7 @@ export function AddServerModal({
                     type="checkbox"
                     checked={selectedClients.includes(client.id)}
                     onChange={() => toggleClient(client.id)}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-4 h-4 text-system-accent bg-gray-100 border-gray-300 rounded focus:ring-system-accent dark:focus:ring-system-accent dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                   />
                   <div>
                     <span className="text-sm font-medium text-gray-900 dark:text-white">
@@ -616,7 +616,7 @@ export function AddServerModal({
             type="submit"
             onClick={handleSubmit}
             disabled={!isFormValid() || isInstalling}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-4 py-2 bg-system-accent text-white rounded-lg hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {isInstalling ? (
               <>

@@ -89,7 +89,7 @@ export function ServerList({
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value as FilterType)}
-          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-system-accent focus:border-transparent transition-colors"
         >
           {FILTER_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
@@ -109,7 +109,7 @@ export function ServerList({
                 setSearch("");
                 setFilter("all");
               }}
-              className="ml-2 text-blue-600 dark:text-blue-400 hover:underline"
+              className="ml-2 text-system-accent dark:text-system-accent hover:underline"
             >
               Clear filters
             </button>

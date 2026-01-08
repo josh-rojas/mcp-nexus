@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import type { MarketplaceServer, ClientId, DetectedClient } from "../../types";
 import { useDetectedClients } from "../../hooks/useClients";
+import { useServerDetails } from "../../hooks/useServerDetails";
 
 interface ServerDetailModalProps {
   server: MarketplaceServer | null;
@@ -334,7 +335,7 @@ function ServerDetailContent({
                     className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
                   >
                     <svg
-                      className="h-4 w-4 text-blue-500"
+                      className="h-4 w-4 text-system-accent"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -380,7 +381,7 @@ function ServerDetailContent({
                     value="stdio"
                     checked={transportMode === "stdio"}
                     onChange={() => setTransportMode("stdio")}
-                    className="w-4 h-4 text-blue-600"
+                    className="w-4 h-4 text-system-accent"
                   />
                   <span className="text-sm text-gray-700 dark:text-gray-300">
                     Local (stdio)
@@ -393,7 +394,7 @@ function ServerDetailContent({
                     value="sse"
                     checked={transportMode === "sse"}
                     onChange={() => setTransportMode("sse")}
-                    className="w-4 h-4 text-blue-600"
+                    className="w-4 h-4 text-system-accent"
                   />
                   <span className="text-sm text-gray-700 dark:text-gray-300">
                     Remote (SSE)
@@ -419,7 +420,7 @@ function ServerDetailContent({
                 value={sseUrl}
                 onChange={(e) => setSseUrl(e.target.value)}
                 placeholder="https://api.example.com/mcp"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-system-accent focus:border-transparent"
               />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                 Enter the SSE endpoint URL for this MCP server
@@ -436,7 +437,7 @@ function ServerDetailContent({
               {detectedClients.length > 0 && (
                 <button
                   onClick={handleSelectAll}
-                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-xs text-system-accent dark:text-system-accent hover:underline"
                 >
                   {detectedClients.every((c) => selectedClients.has(c.id))
                     ? "Deselect All"
@@ -448,7 +449,7 @@ function ServerDetailContent({
             {isLoadingClients ? (
               <div className="flex items-center justify-center py-4">
                 <svg
-                  className="animate-spin h-5 w-5 text-blue-600"
+                  className="animate-spin h-5 w-5 text-system-accent"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
@@ -478,7 +479,7 @@ function ServerDetailContent({
                     key={client.id}
                     className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
                       selectedClients.has(client.id)
-                        ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                        ? "border-system-accent bg-system-accent/5 dark:bg-system-accent/15"
                         : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
                     }`}
                   >
@@ -486,7 +487,7 @@ function ServerDetailContent({
                       type="checkbox"
                       checked={selectedClients.has(client.id)}
                       onChange={() => handleClientToggle(client.id)}
-                      className="w-4 h-4 text-blue-600 rounded"
+                      className="w-4 h-4 text-system-accent rounded"
                     />
                     <div className="flex-1 min-w-0">
                       <span className="text-sm font-medium text-gray-900 dark:text-white truncate block">
@@ -517,7 +518,7 @@ function ServerDetailContent({
           <button
             onClick={handleInstall}
             disabled={!canInstall || isInstalling}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-4 py-2 bg-system-accent text-white rounded-lg hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {isInstalling ? (
               <>
@@ -575,13 +576,19 @@ export function ServerDetailModal({
   onInstall,
   isInstalling = false,
 }: ServerDetailModalProps) {
-  if (!server) return null;
+  // Fetch detailed information (with cache and background update)
+  const { data: detailedServer } = useServerDetails(server?.name ?? null, server);
+  
+  // Use detailed server if available, otherwise fall back to the passed server
+  const displayServer = detailedServer ?? server;
+
+  if (!displayServer) return null;
 
   // Use key prop to reset the inner component when server changes
   return (
     <ServerDetailContent
-      key={server.name}
-      server={server}
+      key={displayServer.name}
+      server={displayServer}
       onClose={onClose}
       onInstall={onInstall}
       isInstalling={isInstalling}

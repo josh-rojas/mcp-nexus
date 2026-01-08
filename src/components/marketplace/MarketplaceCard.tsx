@@ -19,7 +19,7 @@ function getRegistryColor(registry: string | undefined): string {
     case "npm":
       return "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300";
     case "pypi":
-      return "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300";
+      return "bg-system-accent/10 dark:bg-system-accent/20 text-system-accent dark:text-system-accent";
     case "docker":
       return "bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300";
     default:
@@ -33,7 +33,7 @@ export function MarketplaceCard({ server, onSelect }: MarketplaceCardProps) {
   return (
     <button
       onClick={() => onSelect(server)}
-      className="text-left w-full bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow p-4 border border-transparent hover:border-blue-500 dark:hover:border-blue-400"
+      className="text-left w-full bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow p-4 border border-transparent hover:border-system-accent dark:hover:border-blue-400"
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-2">

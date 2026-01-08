@@ -20,6 +20,16 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, "wrapper"> {
   queryClient?: QueryClient;
 }
 
+export function createWrapper(queryClient = createTestQueryClient()) {
+  return function Wrapper({ children }: { children: ReactNode }) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </QueryClientProvider>
+    );
+  };
+}
+
 export function renderWithProviders(
   ui: ReactElement,
   {
@@ -27,16 +37,8 @@ export function renderWithProviders(
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ) {
-  function Wrapper({ children }: { children: ReactNode }) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>{children}</BrowserRouter>
-      </QueryClientProvider>
-    );
-  }
-
   return {
-    ...render(ui, { wrapper: Wrapper as React.ComponentType<{ children: ReactNode }>, ...renderOptions }),
+    ...render(ui, { wrapper: createWrapper(queryClient) as React.ComponentType<{ children: ReactNode }>, ...renderOptions }),
     queryClient,
   };
 }

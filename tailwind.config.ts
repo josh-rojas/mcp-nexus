@@ -52,6 +52,10 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
+        "system-accent": {
+          DEFAULT: "rgb(var(--system-accent-rgb) / <alpha-value>)",
+          foreground: "#ffffff",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

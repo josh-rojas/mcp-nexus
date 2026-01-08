@@ -361,3 +361,15 @@ export async function checkAllHealth(): Promise<HealthCheckResult[]> {
 export async function getServerStatus(serverId: string): Promise<HealthStatus> {
   return invoke("get_server_status", { serverId });
 }
+
+// ============================================================================
+// System Commands
+// ============================================================================
+
+/**
+ * Get the system accent color (macOS only)
+ * Returns a hex color string (e.g., "#007AFF")
+ */
+export async function getSystemAccentColor(): Promise<string> {
+  return invoke("get_system_accent_color");
+}

@@ -23,7 +23,7 @@ function AppContent() {
             <p className="text-red-600 dark:text-red-400 mb-4">Failed to load this page</p>
             <button 
               onClick={() => window.location.href = "/"}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-system-accent text-white rounded-lg hover:opacity-90"
             >
               Go to Dashboard
             </button>

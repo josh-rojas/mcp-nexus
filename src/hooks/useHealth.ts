@@ -74,7 +74,7 @@ export function getHealthStatusColor(status: HealthStatus): string {
     case "unhealthy":
       return "text-red-500";
     case "running":
-      return "text-blue-500";
+      return "text-system-accent";
     case "stopped":
       return "text-gray-400";
     case "unknown":
@@ -91,7 +91,7 @@ export function getHealthStatusBgColor(status: HealthStatus): string {
     case "unhealthy":
       return "bg-red-100 dark:bg-red-900/30";
     case "running":
-      return "bg-blue-100 dark:bg-blue-900/30";
+      return "bg-system-accent/10 dark:bg-system-accent/20";
     case "stopped":
       return "bg-gray-100 dark:bg-gray-800";
     case "unknown":

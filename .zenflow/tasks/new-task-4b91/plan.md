@@ -405,7 +405,7 @@ Implement frosted glass / blur effect on modal overlays for macOS 2025 HIG align
 
 ---
 
-### [ ] Step: GAP-016 – System Accent Color Detection
+### [x] Step: GAP-016 – System Accent Color Detection
 
 Implement dynamic theming based on user's system accent color preference (Blue, Purple, Pink, Red, Orange, Yellow, Green, Graphite).
 
@@ -429,6 +429,7 @@ Implement dynamic theming based on user's system accent color preference (Blue, 
 ### Feature Enhancement & Testing (Phase 3B)
 
 ### [ ] Step: FEATURE-006 – useServerDetails Hook
+<!-- chat-id: c42c70d9-c444-4231-90ca-3d77811eb229 -->
 
 Replace stubbed `useServerDetails` with real React Query hook calling `get_server_details`, keyed per server name, respecting Marketplace cache semantics.
 

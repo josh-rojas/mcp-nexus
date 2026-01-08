@@ -70,11 +70,3 @@ export function useMarketplace({
     isRefreshing: infiniteQuery.isRefetching,
   };
 }
-
-/** Hook for getting a single server's details */
-export function useServerDetails(_name: string | null) {
-  return {
-    // For now, we can use the data from the marketplace list
-    // In Step 3.3, we'll implement the server detail modal with more info
-  };
-}

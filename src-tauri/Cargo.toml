@@ -34,3 +34,7 @@ keyring = "3"       # Cross-platform secure credential storage (macOS Keychain, 
 [dev-dependencies]
 tempfile = "3"          # For testing with temp directories
 
+[target.'cfg(target_os = "macos")'.dependencies]
+cocoa = "0.26"
+objc = "0.2"
+

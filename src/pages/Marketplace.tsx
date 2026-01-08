@@ -220,7 +220,7 @@ export function Marketplace() {
               <div className="mt-6 text-center">
                 <button
                   onClick={handleLoadMore}
-                  className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="px-6 py-2.5 bg-system-accent text-white rounded-lg hover:opacity-90 transition-colors"
                 >
                   Load More
                 </button>
@@ -268,7 +268,7 @@ export function Marketplace() {
                   setCommunityOnly(false);
                   setRemoteAvailable(false);
                 }}
-                className="mt-4 px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                className="mt-4 px-4 py-2 text-sm text-system-accent dark:text-system-accent hover:underline"
               >
                 Clear all filters
               </button>

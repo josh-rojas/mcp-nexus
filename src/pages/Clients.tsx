@@ -124,7 +124,7 @@ export function Clients() {
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <svg
-                className="animate-spin h-10 w-10 text-blue-600 mx-auto mb-4"
+                className="animate-spin h-10 w-10 text-system-accent mx-auto mb-4"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -210,7 +210,7 @@ export function Clients() {
           <button
             onClick={handleSyncAll}
             disabled={isSyncingAll || enabledCount === 0}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-4 py-2 bg-system-accent text-white rounded-lg hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {isSyncingAll ? (
               <>
