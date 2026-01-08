@@ -224,4 +224,25 @@ mod tests {
         assert_eq!(config.version, parsed.version);
         assert_eq!(config.servers.len(), parsed.servers.len());
     }
+
+    #[test]
+    fn test_user_preferences_default_values() {
+        let prefs = UserPreferences::default();
+        assert!(prefs.auto_detect_clients);
+        assert!(prefs.show_notifications);
+        assert!(prefs.auto_sync_on_changes);
+        assert_eq!(prefs.registry_refresh_interval, 60);
+    }
+
+    #[test]
+    fn test_user_preferences_deserialization_defaults() {
+        // When fields are missing, serde should populate defaults
+        let json = "{}";
+        let prefs: UserPreferences = serde_json::from_str(json).unwrap();
+
+        assert!(prefs.auto_detect_clients);
+        assert!(prefs.show_notifications);
+        assert!(prefs.auto_sync_on_changes);
+        assert_eq!(prefs.registry_refresh_interval, 60);
+    }
 }

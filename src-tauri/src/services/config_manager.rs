@@ -388,6 +388,27 @@ mod tests {
         assert_eq!(config.servers.len(), 1);
     }
 
+    #[test]
+    fn test_preferences_persist_across_save_and_load() {
+        let (manager, _temp) = create_test_manager();
+        manager.initialize().unwrap();
+
+        // Load current config and flip the auto_sync_on_changes flag
+        let mut config = manager.load().unwrap();
+        assert!(config.preferences.auto_sync_on_changes);
+
+        config.preferences.auto_sync_on_changes = false;
+        manager.save(&config).unwrap();
+
+        // Reload from disk and ensure the preference value persisted
+        let reloaded = manager.load().unwrap();
+        assert!(!reloaded.preferences.auto_sync_on_changes);
+        assert_eq!(
+            reloaded.preferences.registry_refresh_interval,
+            config.preferences.registry_refresh_interval
+        );
+    }
+
     #[cfg(unix)]
     #[test]
     fn test_file_permissions() {

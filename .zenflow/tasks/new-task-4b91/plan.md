@@ -76,7 +76,8 @@ Bind the Settings “Auto-sync on changes” checkbox to the persisted preferenc
 
 Implement a debounced auto-sync mechanism on the frontend that, when enabled, triggers a Sync All after relevant server mutations (update/toggle/import) while reusing existing sync commands and emitting failure notifications that reference the auto-sync log path.
 
-### [ ] Step: FEATURE-003 – Auto-sync tests & behavior verification
+### [x] Step: FEATURE-003 – Auto-sync tests & behavior verification
+<!-- chat-id: 3fcfba83-ea82-4de2-9e64-427a65c3ce7f -->
 
 Add tests around preference persistence and auto-sync trigger logic, then manually verify that enabling/disabling the flag toggles background sync behavior as expected.
 
