@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import type { MarketplaceServer, ClientId, DetectedClient } from "../../types";
 import { useDetectedClients } from "../../hooks/useClients";
+import { useServerDetails } from "../../hooks/useServerDetails";
 import {
   Dialog,
   DialogContent,
@@ -572,8 +573,11 @@ export function ServerDetailModal({
   isInstalling = false,
 }: ServerDetailModalProps) {
   // Fetch detailed information (with cache and background update)
-  const { data: detailedServer } = useServerDetails(server?.name ?? null, server);
-  
+  const { data: detailedServer } = useServerDetails(
+    server?.name ?? null,
+    server
+  );
+
   // Use detailed server if available, otherwise fall back to the passed server
   const displayServer = detailedServer ?? server;
 

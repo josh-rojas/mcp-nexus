@@ -2,14 +2,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { logger } from "./logger";
 
 describe("Logger Utility", () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let consoleDebugSpy: ReturnType<typeof vi.spyOn<any, any>>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let consoleInfoSpy: ReturnType<typeof vi.spyOn<any, any>>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let consoleWarnSpy: ReturnType<typeof vi.spyOn<any, any>>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let consoleErrorSpy: ReturnType<typeof vi.spyOn<any, any>>;
+  let consoleDebugSpy: ReturnType<typeof vi.spyOn>;
+  let consoleInfoSpy: ReturnType<typeof vi.spyOn>;
+  let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     // Spy on console methods
