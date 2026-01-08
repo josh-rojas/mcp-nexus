@@ -1,45 +1,17 @@
-import type { ClientId } from "../types";
+import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
 
-export function getClientDisplayName(clientId: ClientId): string {
-  const names: Record<ClientId, string> = {
-    "claude-code": "Claude Code",
-    "claude-desktop": "Claude Desktop",
-    cursor: "Cursor",
-    cline: "Cline",
-    vscode: "VS Code",
-    continue: "Continue.dev",
-    windsurf: "Windsurf",
-    warp: "Warp",
-  };
-  return names[clientId] || clientId;
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 }
 
-export function formatDate(isoString: string): string {
-  return new Date(isoString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-export function cn(...classes: (string | boolean | undefined)[]): string {
-  return classes.filter(Boolean).join(" ");
-}
-
-export function formatDistanceToNow(isoString: string): string {
-  const date = new Date(isoString);
+export function formatDistanceToNow(date: Date | string | number): string {
+  const d = new Date(date);
   const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSec = Math.floor(diffMs / 1000);
-  const diffMin = Math.floor(diffSec / 60);
-  const diffHour = Math.floor(diffMin / 60);
-  const diffDay = Math.floor(diffHour / 24);
+  const diffInSeconds = Math.floor((now.getTime() - d.getTime()) / 1000);
 
-  if (diffSec < 60) return "just now";
-  if (diffMin < 60) return `${diffMin}m ago`;
-  if (diffHour < 24) return `${diffHour}h ago`;
-  if (diffDay < 7) return `${diffDay}d ago`;
-  return formatDate(isoString);
+  if (diffInSeconds < 60) return "just now";
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+  return `${Math.floor(diffInSeconds / 86400)}d ago`;
 }

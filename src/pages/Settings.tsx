@@ -4,6 +4,15 @@ import { CredentialManager } from "../components/settings/CredentialManager";
 import { useRefreshUpdates, useServersWithUpdates } from "../hooks/useUpdates";
 import { useConfig, useUpdatePreferences } from "../hooks/useConfig";
 import { formatDistanceToNow } from "../lib/utils";
+import { useTheme } from "../hooks/useTheme";
+import type { Theme } from "../contexts/ThemeContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function Settings() {
   const {
@@ -23,12 +32,39 @@ export function Settings() {
   const updatePreferences = useUpdatePreferences();
   const autoSyncEnabled =
     config?.preferences.autoSyncOnChanges ?? true;
+  
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="flex-1 flex flex-col">
       <Header title="Settings" subtitle="Configure MCP Nexus" />
       <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900 overflow-y-auto">
         <div className="max-w-2xl space-y-6">
+          {/* Appearance Settings */}
+          <section className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+              Appearance
+            </h2>
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-gray-700 dark:text-gray-300">Theme</span>
+                <p className="text-sm text-gray-500">
+                  Select your preferred interface theme.
+                </p>
+              </div>
+              <Select value={theme} onValueChange={(val) => setTheme(val as Theme)}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select theme" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="light">Light</SelectItem>
+                  <SelectItem value="dark">Dark</SelectItem>
+                  <SelectItem value="system">System</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </section>
+
           <EnvironmentStatus />
 
           {/* Update Settings */}

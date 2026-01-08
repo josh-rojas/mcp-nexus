@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Sidebar } from "./components/layout/Sidebar";
-import { ToastContainer } from "./components/common/Toast";
+import { Toaster } from "@/components/ui/sonner";
 import { ErrorBoundary } from "./components/common/ErrorBoundary";
 import { useGlobalKeyboardShortcuts } from "./hooks/useKeyboard";
+import { ThemeProvider } from "./components/ThemeProvider";
 import { Dashboard, Marketplace, Servers, Clients, Settings } from "./pages";
 import "./App.css";
 
@@ -45,10 +46,12 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <AppContent />
-          <ToastContainer />
-        </BrowserRouter>
+        <ThemeProvider>
+          <BrowserRouter>
+            <AppContent />
+            <Toaster />
+          </BrowserRouter>
+        </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );

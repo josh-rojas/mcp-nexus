@@ -158,7 +158,7 @@ Update Tauri window configuration for native macOS appearance (transparent title
 
 ---
 
-### [ ] Step 2: GAP-013 – Tailwind Configuration ⚡ **PARALLEL**
+### [x] Step 2: GAP-013 – Tailwind Configuration ⚡ **PARALLEL**
 
 Create `tailwind.config.ts` with shadcn/ui preset, SF Pro font stack, dark mode class strategy, and custom animations for macOS alignment.
 
@@ -182,7 +182,7 @@ Create `tailwind.config.ts` with shadcn/ui preset, SF Pro font stack, dark mode 
 
 ---
 
-### [ ] Step 3: GAP-009 – Theme Provider & Dark Mode Context ⚡ **PARALLEL**
+### [x] Step 3: GAP-009 – Theme Provider & Dark Mode Context ⚡ **PARALLEL**
 
 Create React Context for theme state (light/dark/system) with system preference detection and localStorage persistence.
 
@@ -208,7 +208,7 @@ Create React Context for theme state (light/dark/system) with system preference 
 
 ---
 
-### [ ] Step 4: GAP-001 – shadcn/ui Setup (Depends on Steps 2 + 3)
+### [x] Step 4: GAP-001 – shadcn/ui Setup (Depends on Steps 2 + 3)
 
 Initialize shadcn/ui component library and integrate with custom Tailwind config and theme provider.
 
@@ -232,7 +232,7 @@ Initialize shadcn/ui component library and integrate with custom Tailwind config
 
 ---
 
-### [ ] Step 5: GAP-010 – Toast Component Replacement (Depends on Step 4)
+### [x] Step 5: GAP-010 – Toast Component Replacement (Depends on Step 4)
 
 Replace custom `Toast.tsx` with shadcn/ui Toaster and update notification store integration.
 
@@ -253,7 +253,7 @@ Replace custom `Toast.tsx` with shadcn/ui Toaster and update notification store 
 
 ---
 
-### [ ] Step 6: Settings UI – Add Appearance Controls (Optional, Depends on Step 3)
+### [x] Step 6: Settings UI – Add Appearance Controls (Optional, Depends on Step 3)
 
 Add "Appearance" section to Settings page for theme toggle (Light / Dark / System).
 
@@ -274,7 +274,7 @@ Add "Appearance" section to Settings page for theme toggle (Light / Dark / Syste
 
 ---
 
-### [ ] Step 7: FEATURE-005 Smoke Tests – Servers & Marketplace (Depends on Step 5)
+### [x] Step 7: FEATURE-005 Smoke Tests – Servers & Marketplace (Depends on Step 5)
 
 Implement smoke tests for Servers and Marketplace pages, validating FEATURE-002 notifications and FEATURE-004 branding.
 
@@ -296,7 +296,7 @@ Implement smoke tests for Servers and Marketplace pages, validating FEATURE-002 
 
 ---
 
-### [ ] Step 8: FEATURE-005 Smoke Tests – Clients, Settings, FirstRun (Depends on Step 5)
+### [x] Step 8: FEATURE-005 Smoke Tests – Clients, Settings, FirstRun (Depends on Step 5)
 
 Implement smoke tests for Clients, Settings, and FirstRun pages.
 
@@ -320,7 +320,9 @@ Implement smoke tests for Clients, Settings, and FirstRun pages.
 
 ---
 
-### [ ] Step 9: Modal Focus Management & Accessibility (Optional, Depends on Step 4)
+### [-] Step 9: Modal Focus Management & Accessibility (Optional, Depends on Step 4)
+
+**Skipped:** Deferring to GAP-011 (Phase 3) where custom modals will be replaced by shadcn/ui Dialog components which handle focus management automatically.
 
 Enhance existing modals (AddServerModal, ServerDetailModal, ManualConfigModal) with focus trap and accessibility attributes.
 
@@ -340,7 +342,7 @@ Enhance existing modals (AddServerModal, ServerDetailModal, ManualConfigModal) w
 
 ---
 
-### [ ] Step 10: Validation Gate – Full Integration (Final)
+### [x] Step 10: Validation Gate – Full Integration (Final)
 
 Run comprehensive validation: lint, typecheck, test suite, manual verification on macOS.
 
