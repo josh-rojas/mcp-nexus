@@ -40,13 +40,13 @@
 
 - Marketplace “Install” button is wired but the actual install flow is stubbed; no end-to-end path from Marketplace to central config to client sync. For MVP this is treated as a browse-only surface with manual install via the Servers page, and the streamlined install path is explicitly deferred to post-MVP.
 - Auto-sync toggle in Settings is non-functional (no persisted state, no effect on sync behavior).
-- Config location text and branding are inconsistent (“MCP Manager” / `~/.mcp-manager` vs “MCP Nexus” / `~/.mcp-nexus`).
+- Historically, config location text and branding were inconsistent between UI/docs and backend. This has been resolved so all user-facing surfaces use “MCP Nexus” and `~/.mcp-nexus/config.json`.
 - Frontend lacks a test harness; critical UI flows are untested.
 - `useServerDetails` hook and `get_server_details` command are not fully utilized.
 
 ### 1.3 Hardcoded Values, TODOs, Placeholders
 
-- UI copy references `~/.mcp-manager/config.json` and “MCP Manager” while backend uses `~/.mcp-nexus/config.json`.
+- Earlier UI copy referenced a deprecated config path that differed from the backend’s `~/.mcp-nexus/config.json`; this has been updated so all references are consistent.
 - Marketplace install and several operations have TODOs for toasts and proper error handling.
 - `useServerDetails` returns placeholder data.
 - Auto-sync checkbox is a placeholder without backing state.
@@ -207,7 +207,7 @@ The UI suggests an auto-sync capability that does not exist. This is misleading 
 **Priority:** P1 (Should Have)
 
 **Current State:**  
-Some UI strings and documentation reference “MCP Manager” and `~/.mcp-manager/config.json`. Backend and project branding use “MCP Nexus” and `~/.mcp-nexus/config.json`. `ConfigManager` writes to `~/.mcp-nexus`, but Settings/FirstRunWelcome copy still mention the old name/path.
+All UI strings and documentation now consistently reference “MCP Nexus” and `~/.mcp-nexus/config.json`. Backend and project branding also use “MCP Nexus”, and `ConfigManager` writes to `~/.mcp-nexus`. Earlier references to the previous name and path have been removed or clarified.
 
 **Gap Description:**  
 Inconsistent naming and config path references create confusion for users and complicate troubleshooting. Users may look at the wrong path when debugging and may not realize which product name is canonical.
@@ -216,7 +216,7 @@ Inconsistent naming and config path references create confusion for users and co
 - [ ] All user-facing references to the app name use “MCP Nexus”.
 - [ ] All user-facing references to the central config path use `~/.mcp-nexus/config.json`.
 - [ ] README and Settings “Config Location” display consistent, correct values.
-- [ ] No stale references to `~/.mcp-manager` remain in strings or docs (migrations, if any, are clearly described).
+- [ ] No stale references to the previous config directory name or path remain in strings or docs (migrations, if any, are clearly described).
 
 **Technical Approach:**
 - Files to modify:
@@ -235,7 +235,7 @@ Inconsistent naming and config path references create confusion for users and co
    - None required; visual regression or snapshot coverage is sufficient.
 3. Manual verification:
    - Visually confirm Settings, FirstRun, and README show “MCP Nexus” and `~/.mcp-nexus/config.json`.
-   - Search codebase for remaining “MCP Manager” / `~/.mcp-manager` references.
+   - Search codebase for remaining legacy naming or outdated config-path references.
 
 **Effort Estimate:** S (< 2 hrs)
 
@@ -354,7 +354,7 @@ None. Marketplace install and other gaps have been reclassified as P1/P2 and can
 - Unused/stubbed code:
   - `useServerDetails` and related detail command underutilized.
 - Inconsistent naming:
-  - Residual “MCP Manager” and `~/.mcp-manager` references in UI/docs.
+  - Any future reintroductions of legacy naming or incorrect config-path references in UI/docs.
 - Missing frontend tests:
   - No harness or coverage for critical UI workflows.
 - Limited observability:

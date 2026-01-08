@@ -91,11 +91,13 @@ Run `npm run lint`, `npm run typecheck`, and `cd src-tauri && cargo test` (if ba
 
 Update UI components (Sidebar, Settings, FirstRun, page metadata) so all user-facing app-name and central-config-path references use “MCP Nexus” and `~/.mcp-nexus/config.json`.
 
-### [ ] Step: FEATURE-004 – Branding & config path updates in docs
+### [x] Step: FEATURE-004 – Branding & config path updates in docs
+<!-- chat-id: 228ded33-1cb0-4dd3-a2ba-6609c7a259c4 -->
 
 Review README and relevant docs for residual “MCP Manager” / `~/.mcp-manager` references and update them or add clarifying migration notes where appropriate.
 
 ### [ ] Step: FEATURE-004 – Branding verification sweep
+<!-- chat-id: 4916837c-eab9-42b6-93c9-6aff3597c104 -->
 
 Run a repo-wide search to confirm no incorrect user-facing branding or config-path references remain, explicitly excluding intentional keychain internals.
 

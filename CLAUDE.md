@@ -1,7 +1,7 @@
-# MCP Manager - Project Configuration
+# MCP Nexus - Project Configuration
 
 ## Overview
-MCP Manager is a desktop application for managing MCP (Model Context Protocol) servers across multiple AI clients. Built with Tauri (Rust backend) + React (TypeScript frontend).
+MCP Nexus is a desktop application for managing MCP (Model Context Protocol) servers across multiple AI clients. Built with Tauri (Rust backend) + React (TypeScript frontend).
 
 ## Technology Stack
 - **Backend**: Rust with Tauri framework
