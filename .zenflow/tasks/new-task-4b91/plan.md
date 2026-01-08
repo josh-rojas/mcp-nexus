@@ -64,14 +64,6 @@ Integrate notification helpers into Servers and Marketplace flows so server inst
 
 Integrate notification helpers into Clients sync operations and `CredentialManager` create/delete flows, ensuring completion/failure states are clearly surfaced.
 
-### [ ] Step: FEATURE-002 – Notification behavior tests
-
-Add focused tests around notification helpers and at least one UI-level assertion per critical flow to validate that expected notifications are emitted.
-
-### [ ] Step: Validation Gate after FEATURE-002
-
-Run `npm run lint`, `npm run typecheck`, and `cd src-tauri && cargo test` (if backend touched) to ensure no regressions before starting FEATURE-003.
-
 ### [x] Step: FEATURE-003 – Auto-sync preference modeling (Rust/TS)
 
 Extend `UserPreferences` in Rust and TS with an `autoSyncOnChanges` flag defaulting to `true`, maintain backwards-compatible defaults, and expose the preference via existing config commands and a dedicated config hook.
@@ -157,6 +149,10 @@ Wire `ServerDetailModal` and the `Marketplace` page to the new hook, thread thro
 ### [ ] Step: FEATURE-001 (P2) – Marketplace install tests & manual verification
 
 Add TS tests for the mapping helper plus at least one Marketplace install smoke test, then manually verify end-to-end installs for npm/uvx/docker/remote sources.
+
+### [ ] Step: Cross-cutting notification behavior tests
+
+After all major features are wired, add focused tests around the notification helpers and at least one UI-level assertion per critical flow (servers, clients, marketplace, credentials, auto-sync) to validate that expected notifications are emitted end-to-end.
 
 ### [ ] Step: Final Verification & Report
 
