@@ -516,10 +516,173 @@ export const cn = clsx; // or create wrapper
 
 ---
 
-## Revised Dependency Matrix (Updated)
+### GAP-017: Native macOS Window Styling (Tauri Config) ✅ **CRITICAL PATH**
+**Status:** Phase 2 (NEW - macOS 2025/2026 alignment)
+**Severity:** P1 (Should Have) – Visual polish, native appearance
+
+**Problem:**
+- `src-tauri/tauri.conf.json` lacks macOS-specific window configuration
+- Window controls (traffic lights) not positioned according to macOS conventions
+- Title bar not transparent; doesn't blend with content
+- App doesn't respect macOS light/dark window chrome
+
+**Current Config:**
+```json
+{
+  "windows": [
+    {
+      "title": "mcp-nexus",
+      "width": 800,
+      "height": 600
+    }
+  ]
+}
+```
+
+**Missing Properties (macOS Native Styling):**
+- `titleBarStyle: "Overlay"` – Blends title bar with content
+- `trafficLightPosition: { "x": 16, "y": 12 }` – Standard macOS positioning
+- `hiddenTitle: false` – Show window title
+- `decorations: true` – Native window controls
+- `minWidth`, `minHeight` – Prevent UI breakage at small sizes
+
+**Solution:**
+```json
+{
+  "windows": [
+    {
+      "title": "mcp-nexus",
+      "width": 1200,
+      "height": 800,
+      "minWidth": 960,
+      "minHeight": 600,
+      "titleBarStyle": "Overlay",
+      "trafficLightPosition": { "x": 16, "y": 12 },
+      "hiddenTitle": false,
+      "decorations": true
+    }
+  ]
+}
+```
+
+**Verification:**
+- Window renders on macOS with traffic lights visible and positioned correctly
+- Title bar blends with content (no harsh color separation)
+- Window respects min dimensions without UI breakage
+
+**Effort:** S (0.5–1 hr) | **Blocker:** None (visual polish, not functional)
+
+---
+
+### GAP-015: Liquid Glass Material (Modal Overlays) ✅ **PHASE 3**
+**Status:** Phase 3
+**Severity:** P2 (Nice to Have) – Modern visual design
+
+**Problem:**
+- macOS 2025 HIG introduces "Liquid Glass" material for visual depth
+- Current modals use opaque backdrops with hardcoded colors
+- No frosted glass / blur effect on modal overlays
+- Doesn't align with latest Apple design trends
+
+**Design Pattern (macOS 2025):**
+- Modal background: `backdrop-filter: blur(10px)` with semi-transparent overlay
+- Shadow: `-webkit-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1)`
+- Border: `border: 1px solid rgba(255, 255, 255, 0.2)` (subtle separation)
+
+**Example Implementation:**
+```css
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal-overlay {
+    background: rgba(0, 0, 0, 0.6);
+  }
+  .modal-content {
+    background: rgba(30, 30, 30, 0.9);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+```
+
+**Applies To:**
+- AddServerModal, ServerDetailModal, ManualConfigModal
+- Any future popovers or dropdown menus
+- Settings modal (if implemented)
+
+**Verification:**
+- Modal has subtle frosted glass appearance
+- Blur effect visible on light and dark backgrounds
+- No performance degradation on older macOS versions (graceful fallback)
+
+**Effort:** M (2–3 hrs) | **Blocker:** None; depends on GAP-001 (shadcn/ui setup)
+
+---
+
+### GAP-016: System Accent Color Detection ✅ **PHASE 3**
+**Status:** Phase 3
+**Severity:** P2 (Nice to Have) – Dynamic theming
+
+**Problem:**
+- Hardcoded blue accent color throughout app (`#2563eb` / Tailwind `blue-600`)
+- macOS allows users to select system accent color (Blue, Purple, Pink, Red, Orange, Yellow, Green, Graphite)
+- App should respect user's system accent preference
+
+**macOS 2025 Pattern:**
+- User sets accent color in System Preferences → General
+- Apps can read via `NSColor.controlAccentColor` (native) or infer from system colors
+- Web apps can use CSS custom properties + system detection
+
+**Implementation Approach (Phase 3):**
+1. Create Tauri command to read system accent color (macOS native)
+2. Inject CSS custom property: `--system-accent: #<hex>`
+3. Replace hardcoded blue with `var(--system-accent)`
+4. Fallback to blue if detection fails
+
+**Example Custom Property:**
+```css
+:root {
+  --system-accent: #2563eb; /* default blue */
+  --system-accent-rgb: 37, 99, 235;
+}
+
+/* Usage */
+.button-primary {
+  background-color: var(--system-accent);
+}
+
+.button-primary:hover {
+  opacity: 0.8;
+}
+```
+
+**Verification:**
+- Rust backend command returns system accent color
+- CSS property updated on app startup
+- Buttons, links, and highlights use dynamic color
+- Fallback works if detection fails
+
+**Effort:** M (2–4 hrs) | **Blocker:** None; nice-to-have dynamic theming
+
+---
+
+## Revised Dependency Matrix (Updated with macOS 2025/2026 Gaps)
 
 | Gap | Blocks | Blocked By | Phase | Priority |
 |-----|--------|-----------|-------|----------|
+| **GAP-017 (Native Window Styling)** | **None** | **None** | **2** | **P1** |
 | **GAP-009 (Theme Context)** | **GAP-010, GAP-001** | **None** | **2** | **CRITICAL** |
 | **GAP-013 (Tailwind Config)** | **GAP-001** | **None** | **2** | **CRITICAL** |
 | GAP-001 (shadcn/ui) | GAP-010, GAP-011, GAP-012 | GAP-009, GAP-013 | 2 | P1 |
@@ -534,19 +697,36 @@ export const cn = clsx; // or create wrapper
 | GAP-008 (Logging) | None | None | 3 | P2 |
 | GAP-012 (Icons) | None | GAP-001 | 3 | P2 |
 | GAP-014 (clsx) | None | None | 3 | P2 |
+| **GAP-015 (Liquid Glass)** | **None** | **GAP-001** | **3** | **P2** |
+| **GAP-016 (System Accent Color)** | **None** | **None** | **3** | **P2** |
 
 ---
 
-## Critical Path (Updated)
+## Critical Path (Updated with macOS 2025/2026 Alignment)
 
 ```
-GAP-013 (Tailwind Config) ────┐
-                              ├─→ GAP-001 (shadcn/ui) ──→ GAP-010 (Toast) ──→ FEATURE-005 Tests
-                              │
-GAP-009 (Theme Context) ──────┘
-
-GAP-009 also unblocks: GAP-006 (Dark Mode Detection)
+PARALLEL GROUP 1 (Phase 2):
+├─ GAP-017 (Native Window Styling) ──┐
+├─ GAP-013 (Tailwind Config) ────────┤
+└─ GAP-009 (Theme Context) ──────────┤
+                                     ├─→ GAP-001 (shadcn/ui) ──→ GAP-010 (Toast) ──→ FEATURE-005 Tests ──→ Validation Gate
+                                     │
+PHASE 3 BLOCKERS:
+├─ GAP-006 (Dark Mode) unblocked by GAP-009
+├─ GAP-015 (Liquid Glass) unblocked by GAP-001
+├─ GAP-016 (System Accent) independent
+└─ All other Phase 3 gaps independent
 ```
+
+**Phase 2 Critical Path Duration:** 
+- GAP-017: 0.5–1 hr (parallel)
+- GAP-013: 1–2 hrs (parallel)
+- GAP-009: 2–3 hrs (parallel)
+- GAP-001: 4–6 hrs (sequential after 013 + 009)
+- GAP-010: 2–4 hrs (sequential after 001)
+- FEATURE-005 Tests: 8–12 hrs (sequential after 010)
+- Validation Gate: 1–2 hrs (final)
+- **Total: 19–30 hours (~2.5–4 days)**
 
 ---
 
@@ -565,31 +745,53 @@ GAP-009 also unblocks: GAP-006 (Dark Mode Detection)
 
 ---
 
-## Recommended Rollout
+## Recommended Rollout (Updated with macOS 2025/2026 Standards)
 
-**Phase 2 (MVP Validation):**
-- ✅ GAP-001: shadcn/ui + theme (unblocks all UI work)
-- ✅ GAP-002: Smoke tests (validates FEATURE-002/003/004)
+**Phase 2 (MVP Validation) – 19–30 hours:**
+- ✅ **GAP-017**: Native macOS window styling (Tauri config)
+- ✅ **GAP-013**: Tailwind configuration (SF Pro, dark mode class strategy)
+- ✅ **GAP-009**: Theme provider context (system preference detection, localStorage)
+- ✅ **GAP-001**: shadcn/ui setup (component library, integration with theme)
+- ✅ **GAP-010**: Toast replacement (custom → shadcn/ui Toaster)
+- ✅ **FEATURE-005**: Smoke tests (validates FEATURE-002/003/004)
+- ✅ **Validation Gate**: Lint, typecheck, full test suite passing
 
-**Phase 3 (Quality & Polish):**
-- GAP-005: Dark mode (depends on GAP-001)
-- GAP-003: Error boundary tests
-- GAP-004: Accessibility baseline
-- GAP-006: CI/CD pipeline
-- GAP-007: Env configuration
-- GAP-008: Structured logging
+**Phase 3 (Quality, Polish & macOS Features) – 20–35 hours:**
+- GAP-015: Liquid Glass material (modal overlays, frosted glass effect)
+- GAP-016: System accent color detection (dynamic theming based on user preferences)
+- GAP-006: Dark mode detection tests (system preference listener, localStorage persistence)
+- GAP-011: Modal migration (custom → shadcn/ui Dialog, focus management)
+- GAP-012: Icon system (inline SVG → lucide-react SF Symbols)
+- GAP-005: Accessibility baseline (WCAG 2.1 AA: aria attributes, keyboard navigation)
+- GAP-003: Error boundary testing (render errors, network failures)
+- GAP-004: Component library documentation (Storybook or patterns catalog)
+- GAP-007: Environment variable configuration
+- GAP-008: Structured logging & instrumentation
+- GAP-002: Pre-commit hooks & CI/CD pipeline
 
-**Post-MVP (Compliance):**
-- Extended accessibility testing (WCAG 2.1 AA full audit)
-- Performance monitoring
-- Telemetry/analytics (if required)
+**Post-MVP (Compliance & Performance):**
+- Extended accessibility testing (WCAG 2.1 AA full audit with screen reader testing)
+- Performance monitoring & optimization
+- Telemetry/analytics (if required by business)
 
 ---
 
-## Impact on MVP Launch
+## Impact on MVP Launch (Updated with macOS 2025/2026 Alignment)
 
-**Blocking Items:** None – all gaps are incremental improvements.
+**Blocking Items:** None – all gaps are incremental improvements aligned with macOS best practices.
 
-**Recommended for MVP:** GAP-001, GAP-002 (Phase 2).
+**Phase 2 Essentials (Must Complete Before MVP):**
+- ✅ **GAP-017**: Native window styling (visual polish, expected on macOS)
+- ✅ **GAP-013**: Tailwind configuration (SF Pro fonts, dark mode class strategy)
+- ✅ **GAP-009**: Theme context (system preference detection, user control)
+- ✅ **GAP-001**: shadcn/ui (component consistency, accessibility baseline)
+- ✅ **GAP-010**: Toast replacement (FEATURE-002 notifications via modern Toast)
+- ✅ **FEATURE-005**: Smoke tests (validates all 3 completed features + infrastructure)
 
-**Can Defer:** GAP-003–008 to Phase 3 without blocking release.
+**Phase 3 Nice-to-Haves (Post-MVP Polish):**
+- **Visual Enhancements**: GAP-015 (Liquid Glass), GAP-016 (System accent color)
+- **Component Migration**: GAP-011 (shadcn/ui Dialog), GAP-012 (lucide-react icons)
+- **Testing & CI/CD**: GAP-005 (Accessibility), GAP-006 (Dark mode tests), GAP-002 (Pre-commit/CI)
+- **Developer Experience**: GAP-007 (Env config), GAP-008 (Logging), GAP-004 (Component docs)
+
+**Can Defer to Phase 3 Without Blocking Release:** All Phase 3 items (10 gaps, 20–35 hours)
